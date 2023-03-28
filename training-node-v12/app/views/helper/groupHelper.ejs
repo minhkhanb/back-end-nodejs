@@ -1,0 +1,13 @@
+<%
+groupHelper = (groups, selectedOption) => {
+  return `
+     <select name="group" class="form-control group-dropdown">
+      <option value="novalue">Choose Group</option>
+      ${groups.map(group => {
+        return `
+          <option value="${group._id}" ${(selectedOption._id.toString() === group._id.toString()) ? 'selected' : ''}>${group.name}</option>`
+        }).join('')}
+      </select>
+     `
+}
+%>

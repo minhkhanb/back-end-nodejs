@@ -1,0 +1,16 @@
+<%
+sortHelper = (collection, name, sort) => {
+  const column = name.toLowerCase();
+  const {field: sortField, type: sortType} = sort;
+
+  const isSortable = column === sortField;
+
+  const classes = isSortable ? `${sortType === 'asc' ? 'ascending' : 'descending'}` : '';
+  const currentSortType = sortType === 'asc' ? 'desc' : 'asc';
+
+  const link = `${systemConfig.prefixAdmin}/${collection}/sort/${column}/${currentSortType}`;
+
+  return `<a class="sortable text-black ${classes}" href="${link}">${name}</a>`;
+};
+%>
+

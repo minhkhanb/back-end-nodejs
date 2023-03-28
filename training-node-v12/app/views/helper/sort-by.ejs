@@ -1,0 +1,9 @@
+<%
+sortByHelper = (user_name, time) => {
+    return `
+        <i class="bi bi-clock"></i>
+        <span>${moment(time).format(systemConfig.formatDate)}</span>
+        `;
+}
+%>
+

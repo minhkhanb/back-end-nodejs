@@ -1,0 +1,20 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <form role="form" action="<%= systemConfig.prefixAdmin %>/users/upload" method="POST"
+                      enctype="multipart/form-data"
+                      class="row g-3">
+                    <div class="col-md-12">
+                        <label>Upload</label>
+                        <input class="form-control" type="file" name="upload_file">
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-success">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+body {
+  font-family: 'Carrois Gothic', sans-serif;
+  font-size: 16px;
+}
+
+.price-list {
+  border-collapse: collapse;
+  text-align: left;
+  /*direction: rtl;*/
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.price-list th,
+.price-list td {
+  width: 260px;
+  padding: 12px 10px;
+  border: 1px solid #dddddd;
+}
+
+.price-list th {
+  text-transform: capitalize;
+}
+
+.price-list tr {
+  border-bottom: 1px solid #dadce0;
+}
+
+.price-list tr:nth-child(even) {
+  background-color: #dddddd;
+}

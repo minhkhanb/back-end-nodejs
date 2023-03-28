@@ -1,0 +1,14 @@
+<% statusHelper = (status, link) => {
+    let classes = '';
+
+    if (status === 'active') {
+      classes = 'success';
+    } else {
+      classes = 'warning';
+    }
+
+    return `
+    <a href="${link}">
+      <span class="label label-${classes}">${status}</span>
+    </a>`;
+} %>

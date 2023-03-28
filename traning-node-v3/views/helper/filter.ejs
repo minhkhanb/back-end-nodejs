@@ -1,0 +1,17 @@
+<% filterStatusHelper = (filterByStatus, keyword) => {
+    return filterByStatus.map(({ name, count, link, value, classes }) => {
+        if (keyword !== '') {
+            return `
+                <a class="btn m-b-sm btn-${classes} btn-sm" href="adminHHH/items/status/${value}?search=${keyword}">
+                    ${name} (${count})
+                </a>
+                `;
+        }
+
+        return `
+            <a class="btn m-b-sm btn-${classes} btn-sm" href="adminHHH/items/status/${value}">
+                ${name} (${count})
+            </a>
+                `;
+    }).join('');
+}; %>

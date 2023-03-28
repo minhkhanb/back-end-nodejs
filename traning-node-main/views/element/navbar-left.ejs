@@ -1,0 +1,15 @@
+<div class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <% navItems.forEach(function({ name, link, icon }){ %>
+                <li>
+                    <a href="<%= link %>">
+                        <i class="<%= icon %>"></i> <%= name %>
+                    </a>
+                </li>
+            <% }); %>
+        </ul>
+        <!-- /#side-menu -->
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>

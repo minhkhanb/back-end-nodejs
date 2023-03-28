@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <% include ./element/header.ejs %>
+    </head>
+    <body>
+        <div id="wrapper">
+          <% include ./element/navbar.ejs %>
+            <div id="page-wrapper">
+              <% include ./element/pageTitle.ejs %>
+              <%- body %>
+            </div>
+        </div>
+        <% include ./element/script.ejs %>
+</html>

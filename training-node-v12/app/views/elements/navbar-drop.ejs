@@ -1,0 +1,39 @@
+<aside id="sidebar" class="sidebar">
+  <ul class="sidebar-nav" id="sidebar-nav">
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="<%= systemConfig.prefixAdmin; %>/dashboard">
+        <i class="bi bi-box"></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="<%= systemConfig.prefixAdmin; %>/items">
+        <i class="bi bi-box"></i>
+        <span>Items</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#groups-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-box"></i>
+        <span>Manager User</span>
+        <i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="groups-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a class="nav-link" href="<%= systemConfig.prefixAdmin; %>/groups">
+            <i class="bi bi-bounding-box"></i>
+            <span>Groups</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="<%= systemConfig.prefixAdmin; %>/users">
+            <i class="bi bi-person"></i>
+            <span>Users</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!-- /#side-menu -->
+  </ul>
+  <!-- /.sidebar-collapse -->
+</aside>

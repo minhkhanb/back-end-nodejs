@@ -1,0 +1,96 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Quality Pet Foods",
+      "price": 199.00,
+      "thumbnail": "img/product-1.png"
+    },
+    {
+      "id": 2,
+      "title": "Quality Pet Foods",
+      "price": 79.00,
+      "thumbnail": "img/product-2.png"
+    },
+    {
+      "id": 3,
+      "title": "Quality Pet Foods",
+      "price": 599.00,
+      "thumbnail": "img/product-3.png"
+    },
+    {
+      "id": 4,
+      "title": "Quality Pet Foods",
+      "price": 69.00,
+      "thumbnail": "img/product-4.png"
+    },
+    {
+      "id": 5,
+      "title": "Quality Pet Foods",
+      "price": 199.00,
+      "thumbnail": "img/product-1.png"
+    },
+    {
+      "id": 6,
+      "title": "Quality Pet Foods",
+      "price": 199.00,
+      "thumbnail": "img/product-2.png"
+    },
+    {
+      "id": 7,
+      "title": "Quality Pet Foods",
+      "price": 199.00,
+      "thumbnail": "img/product-3.png"
+    },
+    {
+      "id": 8,
+      "title": "Quality Pet Foods",
+      "price": 299.00,
+      "thumbnail": "img/product-4.png"
+    },
+    {
+      "id": 9,
+      "title": "Quality Pet Foods",
+      "price": 399.00,
+      "thumbnail": "img/product-1.png"
+    },
+    {
+      "id": 10,
+      "title": "Quality Pet Foods",
+      "price": 499.00,
+      "thumbnail": "img/product-2.png"
+    }
+  ],
+  "pricing": [
+    {
+      "type": "basic",
+      "price": 49,
+      "features": {
+        "HTML5 & CSS3": true,
+        "Bootstrap v5": true,
+        "Responsive Layout": false,
+        "Browser Compatibility": false
+      }
+    },
+    {
+      "type": "standard",
+      "price": 99,
+      "features": {
+        "HTML5 & CSS3": true,
+        "Bootstrap v5": true,
+        "Responsive Layout": true,
+        "Browser Compatibility": false
+      }
+    },
+    {
+      "type": "extended",
+      "price": 149,
+      "features": {
+        "HTML5 & CSS3": true,
+        "Bootstrap v5": true,
+        "Responsive Layout": true,
+        "Browser Compatibility": true
+      }
+    }
+  ]
+}
