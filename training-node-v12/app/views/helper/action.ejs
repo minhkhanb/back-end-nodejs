@@ -1,0 +1,37 @@
+
+<% 
+actionHelper = (collection) => { 
+    actions = [
+        {value: "", name: "Bulk Action"},
+        {value: "change-status/active", name: "Active"},
+        {value: "change-status/inactive", name: "Inactive"},
+        {value: "change-ordering/", name: "Change Ordering"},
+        {value: "delete/", name: "Delete"}
+    ];
+    let xhtmlAction = '';
+    let linkAdd = systemConfig.prefixAdmin + "/" + collection + "/form"
+
+    actions.forEach((action)=>{
+
+        let link     = systemConfig.prefixAdmin + "/" + collection + "/" + action.value
+        xhtmlAction += `<option value="${link}">${action.name}</option>` 
+    });
+   
+   return `
+   <div class="row">
+    <div class="col-lg-3">
+        <div class="d-flex gap-3">
+            <select name="action" class="form-select slbAction">
+                ${xhtmlAction}
+            </select>
+            <button class="btn btn-info btnAction text-white" type="button" id="btn-action" value="btnAction" disabled>Apply</button>
+        </div>
+    </div>
+    <div class="col-lg-9 text-end">
+        <a href="${linkAdd}" class="btn btn-warning btn-addNew text-white">Add New
+        </a>
+    </div>
+</div>`;
+}
+%>
+
