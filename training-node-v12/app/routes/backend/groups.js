@@ -1,5 +1,4 @@
 const express = require('express');
-const moment = require('moment');
 const util = require('node:util');
 const { checkSchema } = require('express-validator');
 
@@ -12,7 +11,11 @@ const { getParam } = require('@src/helper/param');
 
 const { validationSchema } = require('@src/validation/groups');
 
-const { UPDATE_SUCCESS_MESSAGE, CREATE_SUCCESS_MESSAGE } = require('@src/helper/notify');
+const {
+  UPDATE_SUCCESS_MESSAGE,
+  CREATE_SUCCESS_MESSAGE,
+  DELETE_SUCCESS_MESSAGE,
+} = require('@src/helper/notify');
 const { view } = require('@src/config/view');
 const { useGroupRequest, useChangeStatus } = require('@src/hook/group');
 const { useValidation } = require('@src/hook/useValidation');
@@ -93,7 +96,7 @@ groupsRouter.get('/change-status/:id/:status', async (req) => {
     },
   });
 
-  req.flash('success', UPDATE_SUCCESS_MESSAGE, linkIndex);
+  req.flash('success', util.format(UPDATE_SUCCESS_MESSAGE, ''), linkIndex);
 });
 
 groupsRouter.get('/delete/:id', async (req) => {
@@ -101,7 +104,7 @@ groupsRouter.get('/delete/:id', async (req) => {
 
   await GroupQuery.delete(id);
 
-  req.flash('success', 'Xóa phần tử thành công', linkIndex);
+  req.flash('success', util.format(DELETE_SUCCESS_MESSAGE, ''), linkIndex);
 });
 
 groupsRouter.post('/change-status/:status', async (req) => {
@@ -120,7 +123,11 @@ groupsRouter.post('/change-status/:status', async (req) => {
 groupsRouter.post('/delete', async (req) => {
   const results = await GroupQuery.delete(req.body.cid);
 
-  req.flash('success', `Xóa ${results.deletedCount} phần tử thành công`, linkIndex);
+  req.flash(
+    'success',
+    util.format(DELETE_SUCCESS_MESSAGE, `${results.deletedCount} groups`),
+    linkIndex
+  );
 });
 
 groupsRouter.post('/change-ordering', async (req) => {
@@ -170,7 +177,7 @@ groupsRouter.get('/form(/:id)?', async (req, res) => {
 
     res.render(ui, {
       ...options,
-      ...item,
+      item,
       pageTitle: pageTitleAdd,
     });
   } else {

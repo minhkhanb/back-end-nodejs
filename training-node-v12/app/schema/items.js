@@ -1,7 +1,7 @@
-const {Schema, model} = require('mongoose');
-const {config} = require(`${__config}/database`);
+const { Schema, model } = require('mongoose');
+const { config } = require('@src/config/database');
 
-const {items} = config.collection;
+const { items } = config.collection;
 
 const itemsSchema = new Schema(
   {
@@ -19,7 +19,7 @@ const itemsSchema = new Schema(
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
