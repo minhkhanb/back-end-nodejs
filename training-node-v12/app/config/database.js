@@ -10,15 +10,16 @@ const config = {
     items: 'items',
     groups: 'groups',
     users: 'users',
+    menus: 'menus',
+    categories: 'categories',
+    articles: 'articles',
   },
 };
 
 const connectDatabase = () => {
-  const {DB_NAME, DB_USER, DB_PASSWORD, DB_HOST} = config;
+  const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST } = config;
 
-  mongoose.connect(
-    `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
-  );
+  mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`);
 
   const db = mongoose.connection;
 
@@ -33,5 +34,5 @@ const connectDatabase = () => {
 
 module.exports = {
   config,
-  connectDatabase
+  connectDatabase,
 };
