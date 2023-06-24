@@ -4,7 +4,7 @@ const { checkSchema } = require('express-validator');
 
 const systemConfig = require('@src/config/system');
 const { config } = require('@src/config/database');
-const UserQuery = require('@src/models/users');
+const userModels = require('@src/models/users');
 const GroupQuery = require('@src/models/groups');
 
 const { createStatusFilter } = require('@src/helper/utils');
@@ -82,11 +82,11 @@ router.get('(/status/:status)?', async (req, res, _next) => {
     };
   }
 
-  pagination.totalItems = await UserQuery.count(condition);
+  pagination.totalItems = await userModels.count(condition);
 
   const { totalItemsPage } = pagination;
 
-  const items = await UserQuery.list(condition, conditionSort, currentPage, totalItemsPage);
+  const items = await userModels.list(condition, conditionSort, currentPage, totalItemsPage);
 
   const options = {
     pageTitle,
@@ -106,7 +106,7 @@ router.get('(/status/:status)?', async (req, res, _next) => {
 router.get('/change-status/:id/:status', async (req) => {
   const { id, status } = useChangeStatus(req);
 
-  await UserQuery.changeStatus(id, status, {
+  await userModels.changeStatus(id, status, {
     modify: {
       user_name: 'admin',
       user_id: 0,
@@ -119,7 +119,7 @@ router.get('/change-status/:id/:status', async (req) => {
 router.get('/delete/:id', async (req) => {
   const id = getParam(req.params, 'id', '');
 
-  await UserQuery.delete(id);
+  await userModels.delete(id);
 
   req.flash('success', util.format(DELETE_SUCCESS_MESSAGE, ''), linkIndex);
 });
@@ -127,7 +127,7 @@ router.get('/delete/:id', async (req) => {
 router.post('/change-status/:status', async (req) => {
   const currentStatus = getParam(req.params, 'status', 'active');
 
-  const results = await UserQuery.changeStatus(req.body.cid, currentStatus, {
+  const results = await userModels.changeStatus(req.body.cid, currentStatus, {
     modify: {
       user_name: 'admin',
       user_id: 0,
@@ -138,7 +138,7 @@ router.post('/change-status/:status', async (req) => {
 });
 
 router.post('/delete', async (req) => {
-  const results = await UserQuery.delete(req.body.cid);
+  const results = await userModels.delete(req.body.cid);
 
   req.flash(
     'success',
@@ -152,7 +152,7 @@ router.post('/change-ordering', async (req) => {
   let ordering = req.body.ordering;
 
   if (Array.isArray(cid)) {
-    const updatedResults = await UserQuery.changeOrdering(cid, ordering, {
+    const updatedResults = await userModels.changeOrdering(cid, ordering, {
       modify: {
         user_name: 'admin',
         user_id: 0,
@@ -163,7 +163,7 @@ router.post('/change-ordering', async (req) => {
 
     req.flash('success', util.format(UPDATE_SUCCESS_MESSAGE, `${count} ordering`), linkIndex);
   } else {
-    await UserQuery.changeOrdering(cid, ordering, {
+    await userModels.changeOrdering(cid, ordering, {
       modify: {
         user_name: 'admin',
         user_id: 0,
@@ -204,7 +204,7 @@ router.get('/form(/:id)?', async (req, res) => {
     });
   } else {
     const { _id, username, fullname, email, group, ordering, status, description } =
-      await UserQuery.getUser(id);
+      await userModels.getById(id);
 
     res.render(ui, {
       ...options,
@@ -226,7 +226,6 @@ router.get('/form(/:id)?', async (req, res) => {
 
 router.post('/save', checkSchema(validationSchema), async (req, res) => {
   const item = {
-    _id: req.body.id,
     username: req.body.username,
     fullname: req.body.fullname,
     email: req.body.email,
@@ -237,8 +236,6 @@ router.post('/save', checkSchema(validationSchema), async (req, res) => {
   };
 
   const itemId = req.body.id;
-
-  console.log('item save: ', item, itemId);
 
   const { isError, errors } = useValidation(req);
   const mode = item && itemId ? Mode.Edit : Mode.Create;
@@ -258,10 +255,11 @@ router.post('/save', checkSchema(validationSchema), async (req, res) => {
       res.render(ui, {
         ...options,
         item,
+        itemId,
         pageTitle: pageTitleEdit,
       });
     } else {
-      await UserQuery.save(itemId, item);
+      await userModels.save(itemId, item);
 
       req.flash('success', util.format(UPDATE_SUCCESS_MESSAGE, ''), linkIndex);
     }
@@ -270,6 +268,7 @@ router.post('/save', checkSchema(validationSchema), async (req, res) => {
       res.render(ui, {
         ...options,
         item,
+        itemId,
         pageTitle: pageTitleAdd,
       });
     } else {
@@ -282,7 +281,7 @@ router.post('/save', checkSchema(validationSchema), async (req, res) => {
         },
       };
 
-      await UserQuery.save('', fields, {
+      await userModels.save('', fields, {
         created: {
           user_name: 'admin',
           user_id: 0,
