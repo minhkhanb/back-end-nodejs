@@ -1,11 +1,13 @@
 <%
-groupHelper = (groups, selectedOption) => {
+groupHelper = (groups, selectedGroup) => {
+  if (typeof selectedGroup === 'undefined') return 'Id not found';
+
   return `
      <select name="group" class="form-control group-dropdown">
-      <option value="novalue">Choose Group</option>
-      ${groups.map(group => {
+      <option value="novalue">Choose Group ${selectedGroup}</option>
+      ${groups.map(({ _id, name }) => {
         return `
-          <option value="${group._id}" ${(selectedOption._id.toString() === group._id.toString()) ? 'selected' : ''}>${group.name}</option>`
+          <option value="${_id}" ${(selectedGroup === _id.toString()) ? 'selected' : ''}>${name}</option>`
         }).join('')}
       </select>
      `

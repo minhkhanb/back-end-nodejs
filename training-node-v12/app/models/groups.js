@@ -67,8 +67,6 @@ module.exports = {
       ...options,
     };
 
-    console.log('isUpdate: ', isUpdate, itemId, fields);
-
     if (isUpdate) {
       return Group.updateOne({ _id: itemId }, data);
     }

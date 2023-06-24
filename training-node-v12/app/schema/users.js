@@ -1,7 +1,7 @@
-const {Schema, model} = require('mongoose');
-const {config} = require(`${__config}/database`);
+const { Schema, model } = require('mongoose');
+const { config } = require('@src/config/database');
 
-const {users} = config.collection;
+const { users } = config.collection;
 
 const userSchema = new Schema(
   {
@@ -14,7 +14,6 @@ const userSchema = new Schema(
     },
     status: String,
     ordering: Number,
-    group_acp: String,
     description: String,
     created: {
       user_name: String,
@@ -25,7 +24,7 @@ const userSchema = new Schema(
       user_id: Number,
     },
   },
-  {timestamps: true}
+  { timestamps: true }
 );
 
 const User = model(users, userSchema);

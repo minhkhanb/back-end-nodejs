@@ -1,9 +1,8 @@
-const Item = require(`${__schema}/items`);
+const Item = require('@src/schema/items');
 
 module.exports = {
   list: (condition, conditionSort, currentPage, totalItemsPage) => {
-    return Item
-      .find(condition)
+    return Item.find(condition)
       .sort(conditionSort)
       .limit(totalItemsPage)
       .skip((currentPage - 1) * totalItemsPage);
@@ -16,14 +15,14 @@ module.exports = {
 
     const fields = {
       status,
-      ...options
+      ...options,
     };
 
     if (isManyUpdate) {
-      return Item.updateMany({_id: {$in: cid}}, fields);
+      return Item.updateMany({ _id: { $in: cid } }, fields);
     }
 
-    return Item.updateOne({_id: cid}, fields);
+    return Item.updateOne({ _id: cid }, fields);
   },
   changeOrdering: (cid, ordering, options) => {
     const isManyUpdate = Array.isArray(cid);
@@ -33,29 +32,29 @@ module.exports = {
         cid.map((id, index) => {
           const fields = {
             ordering: parseInt(ordering[index]),
-            ...options
+            ...options,
           };
 
-          return Item.updateOne({_id: id}, fields);
+          return Item.updateOne({ _id: id }, fields);
         })
       );
     }
 
     const fields = {
       ordering: parseInt(ordering),
-      ...options
-    }
+      ...options,
+    };
 
-    return Item.updateOne({_id: cid}, fields);
+    return Item.updateOne({ _id: cid }, fields);
   },
   delete: (cid) => {
     const isManyDelete = Array.isArray(cid);
 
     if (isManyDelete) {
-      return Item.deleteMany({_id: {$in: cid}});
+      return Item.deleteMany({ _id: { $in: cid } });
     }
 
-    return Item.deleteOne({_id: cid});
+    return Item.deleteOne({ _id: cid });
   },
   getUser: (id) => {
     return Item.findById(id);
@@ -65,13 +64,13 @@ module.exports = {
 
     const data = {
       ...fields,
-      ...options
-    }
+      ...options,
+    };
 
     if (isUpdate) {
-      return Item.updateOne({_id: itemId}, data);
+      return Item.updateOne({ _id: itemId }, data);
     }
 
     return Item.create(data);
-  }
+  },
 };

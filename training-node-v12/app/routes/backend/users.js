@@ -1,26 +1,30 @@
 const express = require('express');
-const moment = require('moment');
 const util = require('node:util');
-const path = require('path');
-const {checkSchema, validationResult} = require('express-validator');
+const { checkSchema } = require('express-validator');
 
-const systemConfig = require(`${__config}/system`);
-const {config} = require(`${__config}/database`);
-const User = require(`${__schema}/users`);
-const Group = require(`${__schema}/groups`);
-const UserQuery = require(`${__models}/users`);
-const GroupQuery = require(`${__models}/groups`);
+const systemConfig = require('@src/config/system');
+const { config } = require('@src/config/database');
+const UserQuery = require('@src/models/users');
+const GroupQuery = require('@src/models/groups');
 
-const {createStatusFilter} = require(`${__helper}/utils`);
-const {getParam} = require(`${__helper}/param`);
-const {uploadFile} = require(`${__helper}/upload`);
+const { createStatusFilter } = require('@src/helper/utils');
+const { getParam } = require('@src/helper/param');
+const { uploadFile } = require('@src/helper/upload');
 
-const {validationSchema} = require(`${__validation}/users`);
+const { validationSchema } = require('@src/validation/users');
 
-const {UPDATE_SUCCESS_MESSAGE} = require(`${__helper}/notify`);
-const {users: collection} = config.collection;
+const {
+  UPDATE_SUCCESS_MESSAGE,
+  CREATE_SUCCESS_MESSAGE,
+  DELETE_SUCCESS_MESSAGE,
+} = require('@src/helper/notify');
+const { view } = require('@src/config/view');
+const { useGroupRequest, useChangeStatus } = require('@src/hook/group');
+const { useValidation } = require('@src/hook/useValidation');
+const { Mode } = require('@src/config/system');
+const { users: collection } = config.collection;
 
-const usersRouter = express.Router();
+const router = express.Router();
 
 const pageTitle = 'Users Manager ';
 const pageTitleAdd = pageTitle + 'Add';
@@ -28,38 +32,30 @@ const pageTitleEdit = pageTitle + 'Edit';
 
 const linkIndex = `/${systemConfig.prefixAdmin}/${collection}`;
 
-const {view} = require(`${__config}/view`);
-
 const upload = uploadFile();
 
-usersRouter.get('(/status/:status)?', async (req, res, next) => {
-  const currentStatus = getParam(req.params, 'status', 'all');
-  const currentPage = parseInt(getParam(req.query, 'page', 1));
-  const keyword = getParam(req.query, 'keyword', '');
-
-  let sortField = getParam(req.session, 'sort_field', 'ordering');
-  let sortType = getParam(req.session, 'sort_type', 'asc');
-  let groupId = getParam(req.session, 'group_id', '');
+router.get('(/status/:status)?', async (req, res, _next) => {
+  const { currentStatus, currentPage, keyword, sortType, sortField, groupIdSession } =
+    useGroupRequest(req);
+  const ui = `${view.users}/list`;
 
   const statusFilter = await createStatusFilter(collection, currentStatus);
   let condition = {};
 
   const sort = {
     field: sortField,
-    type: sortType
+    type: sortType,
   };
 
-  const groups = await GroupQuery.getGroups();
-
   const conditionSort = {
-    [sort.field]: sort.type
+    [sort.field]: sort.type,
   };
 
   const sortFilter = {
     statusFilter,
     currentStatus,
     keyword,
-    sort
+    sort,
   };
 
   let pagination = {
@@ -69,6 +65,8 @@ usersRouter.get('(/status/:status)?', async (req, res, next) => {
     pageRanges: 3,
   };
 
+  const groups = await GroupQuery.getGroups();
+
   if (currentStatus !== 'all') {
     condition.status = currentStatus;
   }
@@ -77,75 +75,79 @@ usersRouter.get('(/status/:status)?', async (req, res, next) => {
     condition.name = new RegExp(keyword, 'i');
   }
 
-  if (groupId !== '' && groupId !== 'novalue') {
-    console.log(groupId);
+  if (groupIdSession !== '' && groupIdSession !== 'novalue') {
     condition = {
       ...condition,
-      'group.id': groupId
+      'group.id': groupIdSession,
     };
   }
 
   pagination.totalItems = await UserQuery.count(condition);
 
-  const {totalItemsPage} = pagination;
+  const { totalItemsPage } = pagination;
 
   const items = await UserQuery.list(condition, conditionSort, currentPage, totalItemsPage);
 
-  res.render(`${view.users}/list`, {
-    pageTitle: pageTitle,
+  const options = {
+    pageTitle,
     items,
     sortFilter,
     pagination,
-    moment,
     collection,
+  };
+
+  res.render(ui, {
+    ...options,
     groups,
-    groupId
+    groupId: groupIdSession,
   });
 });
 
-usersRouter.get('/change-status/:id/:status', async (req, res, next) => {
-  const currentStatus = getParam(req.params, 'status', 'active');
-  const id = getParam(req.params, 'id', '');
-  const status = currentStatus === 'active' ? 'inactive' : 'active';
+router.get('/change-status/:id/:status', async (req) => {
+  const { id, status } = useChangeStatus(req);
 
   await UserQuery.changeStatus(id, status, {
     modify: {
       user_name: 'admin',
       user_id: 0,
-    }
+    },
   });
 
   req.flash('success', UPDATE_SUCCESS_MESSAGE, linkIndex);
 });
 
-usersRouter.get('/delete/:id', async (req, res, next) => {
+router.get('/delete/:id', async (req) => {
   const id = getParam(req.params, 'id', '');
 
   await UserQuery.delete(id);
 
-  req.flash('success', 'Xóa phần tử thành công', linkIndex);
+  req.flash('success', util.format(DELETE_SUCCESS_MESSAGE, ''), linkIndex);
 });
 
-usersRouter.post('/change-status/:status', async (req, res, next) => {
+router.post('/change-status/:status', async (req) => {
   const currentStatus = getParam(req.params, 'status', 'active');
 
   const results = await UserQuery.changeStatus(req.body.cid, currentStatus, {
     modify: {
       user_name: 'admin',
       user_id: 0,
-    }
+    },
   });
 
   req.flash('success', util.format(UPDATE_SUCCESS_MESSAGE, results.matchedCount), linkIndex);
 });
 
-usersRouter.post('/delete', async (req, res, next) => {
+router.post('/delete', async (req) => {
   const results = await UserQuery.delete(req.body.cid);
 
-  req.flash('success', `Xóa ${results.deletedCount} phần tử thành công`, linkIndex);
+  req.flash(
+    'success',
+    util.format(DELETE_SUCCESS_MESSAGE, `${results.deletedCount} groups`),
+    linkIndex
+  );
 });
 
-usersRouter.post('/change-ordering', async (req, res, next) => {
+router.post('/change-ordering', async (req) => {
   let cid = req.body.cid;
   let ordering = req.body.ordering;
 
@@ -157,15 +159,9 @@ usersRouter.post('/change-ordering', async (req, res, next) => {
       },
     });
 
-    const count = updatedResults.flatMap(
-      (result) => result.matchedCount
-    ).length;
+    const count = updatedResults.flatMap((result) => result.matchedCount).length;
 
-    req.flash(
-      'success',
-      util.format(UPDATE_SUCCESS_MESSAGE, `${count} ordering`),
-      linkIndex
-    );
+    req.flash('success', util.format(UPDATE_SUCCESS_MESSAGE, `${count} ordering`), linkIndex);
   } else {
     await UserQuery.changeOrdering(cid, ordering, {
       modify: {
@@ -174,179 +170,167 @@ usersRouter.post('/change-ordering', async (req, res, next) => {
       },
     });
 
-    req.flash(
-      'success',
-      util.format(UPDATE_SUCCESS_MESSAGE, 'ordering'),
-      linkIndex
-    );
+    req.flash('success', util.format(UPDATE_SUCCESS_MESSAGE, 'ordering'), linkIndex);
   }
 });
 
-usersRouter.get('/form(/:id)?', async (req, res, next) => {
+router.get('/form(/:id)?', async (req, res) => {
   const id = getParam(req.params, 'id', '');
-  let showError = null;
-  let user = Object.assign(req.body);
+  const mode = id === '' ? Mode.Create : Mode.Edit;
+  const ui = `${view.users}/form`;
+
+  const options = {
+    collection,
+  };
 
   const groups = await GroupQuery.getGroups();
 
-  if (id === '') {
+  if (mode === Mode.Create) {
     const item = {
       username: '',
       fullname: '',
       email: '',
-      group: {
-        _id: user.group_id || '',
-        name: user.group_name || ''
-      },
-      ordering: '',
-      status: ''
+      group: '',
+      ordering: 0,
+      status: '',
+      description: '',
     };
 
-    res.render(`${view.users}/form`, {
-      pageTitle: pageTitleAdd,
+    res.render(ui, {
+      ...options,
       item,
-      showError,
-      collection,
-      groups
+      pageTitle: pageTitleAdd,
+      groups,
     });
   } else {
-    const item = await UserQuery.getUser(id);
+    const { _id, username, fullname, email, group, ordering, status, description } =
+      await UserQuery.getUser(id);
 
-    res.render(`${view.users}/form`, {
-      pageTitle: pageTitleEdit,
+    res.render(ui, {
+      ...options,
       item: {
-        _id: item._id,
-        username: item.username,
-        fullname: item.fullname,
-        email: item.email,
-        group: {
-          _id: item.group.id,
-          name: item.group.name
-        },
-        ordering: item.ordering,
-        status: item.status,
+        _id,
+        username,
+        fullname,
+        email,
+        status,
+        ordering,
+        group: group.id,
+        description,
       },
-      showError,
-      collection,
-      groups
+      pageTitle: pageTitleEdit,
+      groups,
     });
   }
 });
 
-usersRouter.post(
-  '/save',
-  checkSchema(validationSchema),
-  async (req, res, next) => {
-    const errors = validationResult(req);
-    req.body = JSON.parse(JSON.stringify(req.body));
-    let item = Object.assign(req.body);
+router.post('/save', checkSchema(validationSchema), async (req, res) => {
+  const item = {
+    _id: req.body.id,
+    username: req.body.username,
+    fullname: req.body.fullname,
+    email: req.body.email,
+    group: req.body.group,
+    status: req.body.status,
+    ordering: parseInt(req.body.ordering),
+    description: req.body.description,
+  };
 
-    console.log('item: ', item);
+  const itemId = req.body.id;
 
-    const groups = await GroupQuery.getGroups();
+  console.log('item save: ', item, itemId);
 
-    if ((item !== 'undefined' && item.id !== '')) {
+  const { isError, errors } = useValidation(req);
+  const mode = item && itemId ? Mode.Edit : Mode.Create;
+  const ui = `${view.users}/form`;
 
-      if (!errors.isEmpty()) {
-        res.render(`${view.users}/form`, {
-          pageTitle: pageTitleEdit,
-          item: {
-            ...item,
-            group: {
-              _id: item.group_id,
-              name: item.group_name
-            }
-          },
-          showError: errors.errors,
-          collection,
-          groups
-        });
-      } else {
-        const fields = {
-          username: item.username,
-          fullname: item.fullname,
-          email: item.email,
-          group: {
-            id: item.group_id,
-            name: item.group_name
-          },
-          ordering: parseInt(item.ordering),
-          status: item.status,
-          description: item.description,
-        };
+  const groups = await GroupQuery.getGroups();
 
-        console.log('update: ', fields);
+  const options = {
+    item,
+    errors,
+    collection,
+    groups,
+  };
 
-        await User.updateOne({_id: item.id}, fields);
-
-        req.flash('success', 'Thay đổi phần tử thành công', linkIndex);
-      }
+  if (mode === Mode.Edit) {
+    if (!isError) {
+      res.render(ui, {
+        ...options,
+        item,
+        pageTitle: pageTitleEdit,
+      });
     } else {
-      if (!errors.isEmpty()) {
-        res.render(`${view.users}/form`, {
-          pageTitle: pageTitleAdd,
-          item: {
-            ...item,
-            group: {
-              _id: item.group_id,
-              name: item.group_name
-            }
-          },
-          showError: errors.errors,
-          collection,
-          groups
-        });
-      } else {
-        item.created = {
+      await UserQuery.save(itemId, item);
+
+      req.flash('success', util.format(UPDATE_SUCCESS_MESSAGE, ''), linkIndex);
+    }
+  } else {
+    if (!isError) {
+      res.render(ui, {
+        ...options,
+        item,
+        pageTitle: pageTitleAdd,
+      });
+    } else {
+      const { _id, name } = await GroupQuery.getUser(item.group);
+      const fields = {
+        ...item,
+        group: {
+          id: _id,
+          name,
+        },
+      };
+
+      await UserQuery.save('', fields, {
+        created: {
           user_name: 'admin',
           user_id: 0,
-        };
-
-        item.modify = {
+        },
+        modify: {
           user_name: 'admin',
           user_id: 0,
-        };
+        },
+      });
 
-        item.group = {
-          id: item.group_id,
-          name: item.group_name
-        };
-
-        await User.create(item);
-
-        req.flash('success', 'Thêm mới phần tử thành công', linkIndex);
-      }
+      req.flash('success', util.format(CREATE_SUCCESS_MESSAGE, ''), linkIndex);
     }
   }
-);
+});
 
-usersRouter.get('/sort/:sortField/:sortType', async (req, res, next) => {
-  req.session.sort_field = getParam(req.params, 'sortField', 'ordering');
-  req.session.sort_type = getParam(req.params, 'sortType', 'asc');
+router.get('/sort/:sortField/:sortType', async (req, res) => {
+  const { sortType, sortField } = useGroupRequest(req);
+
+  req.session.sort_field = sortField;
+  req.session.sort_type = sortType;
 
   res.redirect(linkIndex);
 });
 
-usersRouter.get('/filter-group/:groupId', async (req, res, next) => {
-  req.session.group_id = getParam(req.params, 'groupId', '');
+router.get('/filter-group/:groupId', async (req, res) => {
+  const { groupId } = useGroupRequest(req);
+
+  req.session.group_id = groupId;
 
   res.redirect(linkIndex);
 });
 
-usersRouter.get('/upload', async (req, res, next) => {
-
-  res.render(`${view.users}/upload`, {
+router.get('/upload', async (req, res) => {
+  const ui = `${view.users}/upload`;
+  const options = {
     pageTitle: pageTitleEdit,
-  });
+  };
 
+  res.render(ui, options);
 });
 
-usersRouter.post('/upload', upload.single('upload_file'), async (req, res, next) => {
-  console.log(req.file, req.body);
-  res.render(`${view.users}/upload`, {
+router.post('/upload', upload.single('upload_file'), async (req, res) => {
+  const ui = `${view.users}/upload`;
+  const options = {
     pageTitle: pageTitleEdit,
-  });
+  };
 
+  res.render(ui, options);
 });
 
-module.exports = usersRouter;
+module.exports = router;
