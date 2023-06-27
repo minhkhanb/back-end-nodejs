@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "npm run clean && npm run build && node ./build/index.js",
-    "dev": "ts-node src/index.ts",
+    "start": "npm run clean && npm run dev",
+    "dev": "nodemon --exec ts-node ./src/index.ts",
     "clean": "rimraf ./build",
     "build": "tsc",
     "test": "jest"

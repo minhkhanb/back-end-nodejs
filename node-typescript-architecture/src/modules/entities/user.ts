@@ -1,4 +1,4 @@
-import { Entity, ObjectId, ObjectIdColumn, Column } from "typeorm";
+import { Entity, ObjectId, ObjectIdColumn, Column } from 'typeorm';
 
 @Entity()
 export class User {
@@ -10,4 +10,7 @@ export class User {
 
   @Column()
   lastName!: string;
+
+  @Column()
+  isActive!: boolean;
 }
