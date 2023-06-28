@@ -1,8 +1,17 @@
 {
-  "presets": [
+  "presets": ["@babel/env", "@babel/preset-typescript"],
+  "plugins": [
+    "babel-plugin-transform-typescript-metadata",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "@babel/plugin-proposal-class-properties",
     [
-      "@babel/preset-env"
-    ],
-    "@babel/preset-typescript"
+      "module-resolver",
+      {
+        "root": ["./"],
+        "alias": {
+          "@src": "./src"
+        }
+      }
+    ]
   ]
 }

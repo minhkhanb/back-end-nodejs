@@ -1,8 +1,9 @@
 import 'reflect-metadata';
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { DataSource } from 'typeorm';
-import { User } from './modules/entities/user';
-import userRoutes from './routes/user';
+import * as entities from '@src/modules/entities';
+import userRoutes from '@src/routes/user';
+import { User } from '@src/modules/entities';
 
 const app = express();
 const port = 3000;
@@ -10,7 +11,7 @@ const port = 3000;
 app.use(express.json());
 
 // Middleware to establish MongoDB connection
-app.use(async (_req: Request, res: Response, next: NextFunction) => {
+const connectDatabase = async () => {
   try {
     // if (mongoose.connection.readyState === 0) {
     //   await mongoose.connect('mongodb+srv://admin:ShRAexePjIwDVTvp@cluster0.0ozojp9.mongodb.net/house-gate');
@@ -21,27 +22,27 @@ app.use(async (_req: Request, res: Response, next: NextFunction) => {
       url: 'mongodb+srv://admin:ShRAexePjIwDVTvp@cluster0.0ozojp9.mongodb.net/house-gate?retryWrites=true&w=majority',
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      entities: ['src/modules/entities/*.ts'],
+      entities: [...Object.values(entities)],
     });
+
+    console.log('Db is connecting...');
 
     await dataSource
       .initialize()
       .then(() => console.log('Db connect successfully'))
       .catch((err) => console.log(err));
 
+    // Sample to add new user
     const user = new User();
     user.firstName = 'Timber';
     user.lastName = 'Saw';
 
     const manager = dataSource.manager;
     await manager.save(user);
-
-    next();
   } catch (error) {
     console.error('Failed to connect to MongoDB: ', error);
-    res.status(500).json({ message: 'Internal server error' });
   }
-});
+};
 
 app.use('/api/v1', userRoutes);
 
@@ -51,4 +52,7 @@ app.get('/', (_req: Request, res: Response) => {
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
+
+  // Connect to the database after the server has started
+  connectDatabase();
 });
