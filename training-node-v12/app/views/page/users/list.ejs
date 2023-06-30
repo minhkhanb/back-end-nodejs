@@ -5,6 +5,7 @@
 <% include ../../helper/sort-by.ejs %>
 <% include ../../helper/sort.ejs %>
 <% include ../../helper/filter-group.ejs %>
+<% include ../../helper/avatar.ejs %>
 <%- locals.flash; %>
 
 <!-- <div class="alert alert-success" role="alert">
@@ -80,6 +81,9 @@
                       <th scope="col" class="fs--1 align-middle" style="min-width: 8.5rem">
                         <%- sortHelper(collection, 'Fullname', sortFilter.sort) %>
                       </th>
+                      <th scope="col" class="fs--1 align-middle" style="min-width: 8.5rem">
+                        Avatar
+                      </th>
                       <th scope="col" class="fs--1 align-middle">Email</th>
                       <th scope="col" class="fs--1 align-middle" style="min-width: 5rem">Group
                       </th>
@@ -109,6 +113,9 @@
                           <td class="fs--1 align-middle"><%= index + 1; %></td>
                           <td class="fs--1 align-middle"><%= item.username %></td>
                           <td class="fs--1 align-middle"><%= item.fullname %></td>
+                          <td class="fs--1 align-middle">
+                            <%- avatarHelper(item.avatar) %>
+                          </td>
                           <td class="fs--1 align-middle"><%= item.email %></td>
                           <td class="fs--1 align-middle">
                             <i class="bi bi-person"></i>

@@ -1,5 +1,5 @@
 const multer = require('multer');
-const {v4: uuidv4} = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 
 const storage = multer.diskStorage({
@@ -9,32 +9,37 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     const uniqueFilename = `${uuidv4()}${path.extname(file.originalname)}`;
     cb(null, uniqueFilename);
-  }
+  },
 });
 
 const maxSize = 1 * 1024 * 1024;
 
 const uploadFile = () => {
-  return  multer({
+  return multer({
     storage: storage,
     limits: {
-      fileSize: maxSize
+      fileSize: maxSize,
     },
     fileFilter: (req, file, cb) => {
-      const {originalname, mimetype} = file;
+      const { originalname, mimetype } = file;
       const mimetypes = /jpg|jpeg|png|svg|gif/;
       const isValidExt = mimetypes.test(originalname);
       const isValidImage = /^image\//.test(mimetype);
 
       if (!isValidExt || !isValidImage) {
-        return cb(new Error('Invalid image'));
+        req.error = new Error('Invalid image');
+        return cb(null, false);
       }
 
       return cb(null, true);
-    }
+    },
+    onError: (err, next) => {
+      console.log('error', err);
+      next(err);
+    },
   });
 };
 
 module.exports = {
-  uploadFile
+  uploadFile,
 };

@@ -1,4 +1,6 @@
+const fs = require('fs');
 const User = require('@src/schema/users');
+const { removeFile } = require("@src/helper/utils");
 
 module.exports = {
   list: (conditions, sortBy, page, perPage) => {
@@ -51,21 +53,32 @@ module.exports = {
 
     return User.updateOne(conditions, fields);
   },
-  delete: (cid) => {
+  delete: async (cid) => {
     if (Array.isArray(cid)) {
       const conditions = { _id: { $in: cid } };
+
+      await Promise.all(
+        cid.map(async (id) => {
+          const item = await User.findOne({ _id: id });
+
+          removeFile('public/upload', 'users', item.avatar);
+        })
+      );
 
       return User.deleteMany(conditions);
     }
 
     const conditions = { _id: cid };
+    const item = await User.findOne(conditions);
+
+    removeFile('public/upload', 'users', item.avatar);
 
     return User.deleteOne(conditions);
   },
   getById: (id) => {
     return User.findById(id);
   },
-  save: (itemId = '', fields, options) => {
+  save: async (itemId = '', fields, options) => {
     const isUpdate = itemId !== '';
 
     const data = {
@@ -75,6 +88,9 @@ module.exports = {
 
     if (isUpdate) {
       const conditions = { _id: itemId };
+      const item = await User.findOne(conditions);
+
+      removeFile('public/upload', 'users', item.avatar);
 
       return User.updateOne(conditions, data);
     }

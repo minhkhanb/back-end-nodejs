@@ -1,2 +1,6 @@
 training-node-v12/node_modules/
 training-node-v12/.idea/
+node-typescript-architecture/node_modules/
+node-typescript-architecture/coverage/
+node-typescript-architecture/build/
+node-typescript-architecture/.idea/

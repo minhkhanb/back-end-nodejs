@@ -16,6 +16,17 @@ const validationSchema = {
       },
     },
   },
+  avatar: {
+    custom: {
+      options: (value) => {
+        if (!value) {
+          return Promise.reject('Please upload an avatar.');
+        }
+
+        return true;
+      },
+    },
+  },
   ordering: {
     isInt: {
       options: { min: 0, max: 100 },

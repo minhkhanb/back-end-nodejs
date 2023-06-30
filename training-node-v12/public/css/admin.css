@@ -428,106 +428,65 @@ h6 {
   /* Search Bar */
 }
 
-.header .toggle-sidebar-btn {
-  font-size: 32px;
-  padding-left: 10px;
-  cursor: pointer;
-  color: #012970;
-}
-
-.header .search-bar {
-  min-width: 360px;
-  padding: 0 20px;
-}
-
-@media (max-width: 1199px) {
-  .header .search-bar {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    box-shadow: 0px 0px 15px 0px rgba(1, 41, 112, 0.1);
-    background: white;
-    z-index: 9999;
-    transition: 0.3s;
-    visibility: hidden;
-    opacity: 0;
-  }
-
-  .header .search-bar-show {
-    top: 60px;
-    visibility: visible;
-    opacity: 1;
-  }
-}
-
-.header .search-form {
-  width: 100%;
-}
-
-.header .search-form input {
-  border: 0;
-  font-size: 14px;
-  color: #012970;
-  border: 1px solid rgba(1, 41, 112, 0.2);
-  padding: 7px 38px 7px 8px;
-  border-radius: 3px;
-  transition: 0.3s;
-  width: 100%;
-}
-
-.header .search-form input:focus,
-.header .search-form input:hover {
-  outline: none;
-  box-shadow: 0 0 10px 0 rgba(1, 41, 112, 0.15);
-  border: 1px solid rgba(1, 41, 112, 0.3);
-}
-
-.header .search-form button {
-  border: 0;
-  padding: 0;
-  margin-left: -30px;
-  background: none;
-}
-
-.header .search-form button i {
-  color: #012970;
-}
-
 /*--------------------------------------------------------------
 # Header Nav
 --------------------------------------------------------------*/
-.header-nav ul {
+.header ul {
   list-style: none;
 }
 
-.header-nav > ul {
-  margin: 0;
-  padding: 0;
+.header .nav-item {
+  padding: 0 20px;
+  position: relative;
 }
 
-.header-nav .nav-icon {
+.header .nav-item a,
+.header .nav-item span {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.header .nav-item a.active,
+.header .nav-item a:hover,
+.header .nav-item span.active,
+.header .nav-item span:hover {
+  color: #f74000;
+}
+
+.header .nav-item .user-menu {
+  position: absolute;
+  top: 100%;
+  box-shadow: 0 1px 20px rgba(0, 0, 0, .15);
+  display: none;
+  min-width: 200px;
+}
+
+.header .nav-item:hover .user-menu {
+  display: block;
+}
+
+.header .nav-icon {
   font-size: 22px;
   color: #012970;
   margin-right: 25px;
   position: relative;
 }
 
-.header-nav .nav-profile {
+.header .nav-profile {
   color: #012970;
 }
 
-.header-nav .nav-profile img {
+.header .nav-profile img {
   max-height: 36px;
 }
 
-.header-nav .nav-profile span {
+.header .nav-profile span {
   font-size: 14px;
   font-weight: 600;
 }
 
-.header-nav .badge-number {
+.header .badge-number {
   position: absolute;
   inset: -2px -5px auto auto;
   font-weight: normal;
@@ -535,103 +494,103 @@ h6 {
   padding: 3px 6px;
 }
 
-.header-nav .notifications {
+.header .notifications {
   inset: 8px -15px auto auto !important;
 }
 
-.header-nav .notifications .notification-item {
+.header .notifications .notification-item {
   display: flex;
   align-items: center;
   padding: 15px 10px;
   transition: 0.3s;
 }
 
-.header-nav .notifications .notification-item i {
+.header .notifications .notification-item i {
   margin: 0 20px 0 10px;
   font-size: 24px;
 }
 
-.header-nav .notifications .notification-item h4 {
+.header .notifications .notification-item h4 {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 5px;
 }
 
-.header-nav .notifications .notification-item p {
+.header .notifications .notification-item p {
   font-size: 13px;
   margin-bottom: 3px;
   color: #919191;
 }
 
-.header-nav .notifications .notification-item:hover {
+.header .notifications .notification-item:hover {
   background-color: #f6f9ff;
 }
 
-.header-nav .messages {
+.header .messages {
   inset: 8px -15px auto auto !important;
 }
 
-.header-nav .messages .message-item {
+.header .messages .message-item {
   padding: 15px 10px;
   transition: 0.3s;
 }
 
-.header-nav .messages .message-item a {
+.header .messages .message-item a {
   display: flex;
 }
 
-.header-nav .messages .message-item img {
+.header .messages .message-item img {
   margin: 0 20px 0 10px;
   max-height: 40px;
 }
 
-.header-nav .messages .message-item h4 {
+.header .messages .message-item h4 {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 5px;
   color: #444444;
 }
 
-.header-nav .messages .message-item p {
+.header .messages .message-item p {
   font-size: 13px;
   margin-bottom: 3px;
   color: #919191;
 }
 
-.header-nav .messages .message-item:hover {
+.header .messages .message-item:hover {
   background-color: #f6f9ff;
 }
 
-.header-nav .profile {
+.header .profile {
   min-width: 240px;
   padding-bottom: 0;
   top: 8px !important;
 }
 
-.header-nav .profile .dropdown-header h6 {
+.header .profile .dropdown-header h6 {
   font-size: 18px;
   margin-bottom: 0;
   font-weight: 600;
   color: #444444;
 }
 
-.header-nav .profile .dropdown-header span {
+.header .profile .dropdown-header span {
   font-size: 14px;
 }
 
-.header-nav .profile .dropdown-item {
+.header .profile .dropdown-item {
   font-size: 14px;
   padding: 10px 15px;
   transition: 0.3s;
 }
 
-.header-nav .profile .dropdown-item i {
+.header .profile .dropdown-item i {
   margin-right: 10px;
   font-size: 18px;
   line-height: 0;
 }
 
-.header-nav .profile .dropdown-item:hover {
+.header .profile .dropdown-item:hover {
   background-color: #f6f9ff;
 }
 
@@ -668,14 +627,6 @@ h6 {
 
 .sidebar::-webkit-scrollbar-thumb {
   background-color: #aab7cf;
-}
-
-@media (min-width: 1200px) {
-
-  #main,
-  #footer {
-    margin-left: 300px;
-  }
 }
 
 @media (max-width: 1199px) {
@@ -1317,4 +1268,41 @@ h6 {
   border-top: 4px solid #000;
   border-bottom: 4px solid transparent;
   bottom: 0;
+}
+
+/*********************/
+.avatar {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.avatar-l {
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.avatar img {
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.avatar img, .avatar .avatar-name {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar img {
+  display: block;
+}
+
+.avatar .clear {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  display: none;
+}
+
+.avatar.has-img .clear {
+  display: block;
 }

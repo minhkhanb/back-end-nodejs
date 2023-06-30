@@ -1,24 +1,24 @@
-const {config} = require(`${__config}/database`);
-const Items = require(`${__schema}/items`);
-const Group = require(`${__schema}/groups`);
-const User = require(`${__schema}/users`);
+const { config } = require('@src/config/database');
+const Items = require('@src/schema/items');
+const Group = require('@src/schema/groups');
+const User = require('@src/schema/users');
+const fs = require('fs');
 
-const {groups, items, users} = config.collection;
+const { groups, items, users } = config.collection;
 
 const statusFilter = [
-  {name: 'All', value: 'all', count: 0, class: 'default'},
-  {name: 'Active', value: 'active', count: 0, class: 'default'},
-  {name: 'Inactive', value: 'inactive', count: 0, class: 'default'}
+  { name: 'All', value: 'all', count: 0, class: 'default' },
+  { name: 'Active', value: 'active', count: 0, class: 'default' },
+  { name: 'Inactive', value: 'inactive', count: 0, class: 'default' },
 ];
 
 let createStatusFilter = async (collection, currentStatus) => {
-
   for (let index = 0; index < statusFilter.length; index++) {
     let condition = {};
     const item = statusFilter[index];
 
     if (item.value !== 'all') {
-      condition = {status: item.value};
+      condition = { status: item.value };
     }
 
     if (item.value === currentStatus) {
@@ -28,7 +28,6 @@ let createStatusFilter = async (collection, currentStatus) => {
     }
 
     statusFilter[index].count = await getCount(collection, condition);
-
   }
 
   return statusFilter;
@@ -44,7 +43,22 @@ const getCount = (collection, condition) => {
   }
 };
 
+const removeFile = (uploadFolder, collection, filename) => {
+  const filePath = `${uploadFolder}/${collection}/${filename}`;
+  const isExistAvatar = fs.existsSync(filePath);
+
+  if (filename && isExistAvatar) {
+    try {
+      fs.unlinkSync(filePath);
+
+      console.log(`successfully deleted${filename}`);
+    } catch (error) {
+      console.error('there was an error:', error.message);
+    }
+  }
+};
 
 module.exports = {
-  createStatusFilter
+  createStatusFilter,
+  removeFile,
 };

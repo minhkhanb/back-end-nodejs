@@ -22,6 +22,7 @@ const { view } = require('@src/config/view');
 const { useGroupRequest, useChangeStatus } = require('@src/hook/group');
 const { useValidation } = require('@src/hook/useValidation');
 const { Mode } = require('@src/config/system');
+const { MulterError } = require('multer');
 const { users: collection } = config.collection;
 
 const router = express.Router();
@@ -189,6 +190,7 @@ router.get('/form(/:id)?', async (req, res) => {
     const item = {
       username: '',
       fullname: '',
+      avatar: '',
       email: '',
       group: '',
       ordering: 0,
@@ -203,7 +205,7 @@ router.get('/form(/:id)?', async (req, res) => {
       groups,
     });
   } else {
-    const { _id, username, fullname, email, group, ordering, status, description } =
+    const { _id, username, fullname, avatar, email, group, ordering, status, description } =
       await userModels.getById(id);
 
     res.render(ui, {
@@ -212,6 +214,7 @@ router.get('/form(/:id)?', async (req, res) => {
         _id,
         username,
         fullname,
+        avatar,
         email,
         status,
         ordering,
@@ -224,7 +227,7 @@ router.get('/form(/:id)?', async (req, res) => {
   }
 });
 
-router.post('/save', checkSchema(validationSchema), async (req, res) => {
+router.post('/save', upload.single('avatar'), checkSchema(validationSchema), async (req, res) => {
   const item = {
     username: req.body.username,
     fullname: req.body.fullname,
@@ -234,6 +237,12 @@ router.post('/save', checkSchema(validationSchema), async (req, res) => {
     ordering: parseInt(req.body.ordering),
     description: req.body.description,
   };
+
+  console.log('req: ', req.error);
+
+  if (req.file) {
+    item.avatar = req.file.filename;
+  }
 
   const itemId = req.body.id;
 

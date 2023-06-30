@@ -11,19 +11,30 @@
 
     <div class="row">
       <div class="col-md-6">
-        <form role="form" action="<%= systemConfig.prefixAdmin ;%>/<%= collection ;%>/save/" method="POST"
+        <form role="form" action="<%= systemConfig.prefixAdmin; %>/<%= collection; %>/save/" method="POST"
+              enctype="multipart/form-data"
               class="row g-3">
           <div class="col-md-12">
             <label>Username</label>
-            <input class="form-control" name="username" value="<%= item.username ;%>">
+            <input class="form-control" name="username" value="<%= item.username; %>">
           </div>
           <div class="col-md-12">
             <label>Full Name</label>
-            <input class="form-control" name="fullname" value="<%= item.fullname ;%>">
+            <input class="form-control" name="fullname" value="<%= item.fullname; %>">
           </div>
           <div class="col-md-12">
             <label>Email</label>
-            <input class="form-control" type="email" name="email" value="<%= item.email ;%>">
+            <input class="form-control" type="email" name="email" value="<%= item.email; %>">
+          </div>
+          <div class="col-md-12">
+            <label>Avatar</label>
+            <input class="form-control" type="file" name="avatar" value="<%= item.avatar %>">
+            <div class="card avatar <%= item.avatar ? `has-img` : null %>" style="width: 8rem;height: 8rem;margin-top: 15px;">
+              <a href="#" class="clear text-danger">
+                <i class="fa fa-close"></i>
+              </a>
+              <img src="<%= item.avatar ? `upload/users/${item.avatar}` : 'images/default-avatar.jpg' %>" class="card-img" alt="No file chosen">
+            </div>
           </div>
           <div class="col-md-12">
             <label>Group</label>
@@ -31,15 +42,15 @@
           </div>
           <div class="col-md-12">
             <label>Ordering</label>
-            <input class="form-control" type="number" name="ordering" value="<%= item.ordering ;%>">
+            <input class="form-control" type="number" name="ordering" value="<%= item.ordering; %>">
           </div>
           <div class="col-md-12">
             <label>Status</label>
             <select name="status" class="form-control">
               <option value="novalue">Choose Status</option>
-              <option value="active" <%= ((item.status) === "active") ? selected = "selected" : "" ;%> >Active
+              <option value="active" <%= ((item.status) === "active") ? selected = "selected" : ""; %> >Active
               </option>
-              <option value="inactive" <%= ((item.status) === "inactive") ? selected = "selected" : "" ;%> >
+              <option value="inactive" <%= ((item.status) === "inactive") ? selected = "selected" : ""; %> >
                 Inactive
               </option>
             </select>
@@ -47,14 +58,14 @@
           <div class="col-md-12">
             <label>Description</label>
             <textarea class="form-control" name="description" rows="2"
-                      id="description"><%= item.description ;%></textarea>
+                      id="description"><%= item.description; %></textarea>
           </div>
           <div>
             <input class="form-control" name="group_id" type="hidden">
             <input class="form-control" name="group_name" type="hidden">
-            <input class="form-control" name="id" value="<%= item._id ;%>" type="hidden">
+            <input class="form-control" name="id" value="<%= item._id; %>" type="hidden">
             <button type="submit" class="btn btn-success">Submit</button>
-            <a type="button" href="<%= systemConfig.prefixAdmin ;%>/<%= collection ;%>"
+            <a type="button" href="<%= systemConfig.prefixAdmin; %>/<%= collection; %>"
                class="btn btn-secondary">Cancel</a>
           </div>
         </form>
