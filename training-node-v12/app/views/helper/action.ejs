@@ -20,15 +20,29 @@ actionHelper = (collection) => {
    return `
    <div class="row">
     <div class="col-lg-3">
+        <div class="sa-select sa-select--large">
+          <div class="sa-input sa-input--large">
+            <div class="sa-input__wrapper">
+              <input type="text" class="sa-input__inner">
+              <span class="sa-input__suffix">
+                <span class="sa-input__suffix-inner">
+                  <i class="sa-icon sa-select__caret sa-select__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M831.872 340.864 512 652.672 192.128 340.864a30.592 30.592 0 0 0-42.752 0 29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728 30.592 30.592 0 0 0-42.752 0z"></path></svg>
+                  </i>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
         <div class="d-flex gap-3">
-            <select name="action" class="form-select slbAction">
+            <select name="action" class="form-select sa-input--large slbAction">
                 ${xhtmlAction}
             </select>
             <button class="btn btn-info btnAction text-white" type="button" id="btn-action" value="btnAction" disabled>Apply</button>
         </div>
     </div>
     <div class="col-lg-9 text-end">
-        <a href="${linkAdd}" class="btn btn-warning btn-addNew text-white">Add New
+        <a href="${linkAdd}" class="btn btn-primary sa-button sa-button--large btn-addNew text-white text-capitalize">Add ${collection}
         </a>
     </div>
 </div>`;

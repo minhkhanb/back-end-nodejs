@@ -17,9 +17,10 @@ const config = {
 };
 
 const connectDatabase = () => {
-  const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST } = config;
+  // const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST } = config;
 
-  mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`);
+  // mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`);
+  mongoose.connect(`mongodb://localhost:27017/pokemon`);
 
   const db = mongoose.connection;
 
