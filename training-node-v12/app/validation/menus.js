@@ -3,8 +3,8 @@ const Menu = require('@src/schema/menus');
 const validationSchema = {
   name: {
     isLength: {
-      options: { min: 5, max: 100 },
-      errorMessage: 'Field must be between 5 and 100 characters.',
+      options: { min: 3, max: 100 },
+      errorMessage: 'Field must be between 3 and 100 characters.',
     },
     custom: {
       options: async (value) => {

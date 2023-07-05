@@ -72,6 +72,7 @@
                       <th scope="col" class="fs--1 align-middle" style="min-width: 8rem">
                         <%- sortHelper(collection, 'Name', sortFilter.sort) %>
                       </th>
+                      <th scope="col" class="fs--1 align-middle">Slug</th>
                       <th scope="col" class="fs--1 align-middle">Status</th>
                       <th scope="col" class="fs--1 align-middle">
                         <%- sortHelper(collection, 'Ordering', sortFilter.sort) %>
@@ -90,6 +91,7 @@
                           </th>
                           <td class="fs--1 align-middle"><%= index + 1; %></td>
                           <td class="fs--1 align-middle"><%= item.name %></td>
+                          <td class="fs--1 align-middle"><%= item.menu.slug %></td>
                           <td class="fs--1 align-middle"><%- statusHelper(item.status, item.id, collection); %></td>
                           <td class="fs--1 align-middle">
                             <input type="number" value="<%= item.ordering; %>"

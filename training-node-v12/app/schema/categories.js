@@ -9,6 +9,10 @@ const itemsSchema = new Schema(
     status: String,
     ordering: Number,
     description: String,
+    menu: {
+      id: String,
+      slug: String,
+    },
     created: {
       user_name: String,
       user_id: Number,

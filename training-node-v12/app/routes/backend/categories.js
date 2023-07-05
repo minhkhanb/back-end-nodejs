@@ -5,6 +5,7 @@ const { checkSchema } = require('express-validator');
 const systemConfig = require('@src/config/system');
 const { config } = require('@src/config/database');
 const CategoryQuery = require('@src/models/categories');
+const MenuQuery = require('@src/models/menus');
 
 const { createStatusFilter } = require('@src/helper/utils');
 const { getParam } = require('@src/helper/param');
@@ -159,7 +160,7 @@ router.post('/change-ordering', async (req, _res, _next) => {
   }
 });
 
-router.get('/form(/:id)?', async (req, res, next) => {
+router.get('/form(/:id)?', async (req, res, _next) => {
   const id = getParam(req.params, 'id', '');
   const mode = id === '' ? Mode.Create : Mode.Edit;
   const ui = `${view.categories}/form`;
@@ -168,12 +169,16 @@ router.get('/form(/:id)?', async (req, res, next) => {
     collection,
   };
 
+  const menus = await MenuQuery.getMenus({ status: 'active' });
+
   if (mode === Mode.Create) {
     const item = {
       name: '',
       status: '',
       ordering: 0,
       description: '',
+      menu: '',
+      menus,
     };
 
     res.render(ui, {
@@ -182,7 +187,9 @@ router.get('/form(/:id)?', async (req, res, next) => {
       pageTitle: pageTitleAdd,
     });
   } else {
-    const { _id, name, ordering, status, description } = await CategoryQuery.getUser(id);
+    const { _id, name, menu, ordering, status, description } = await CategoryQuery.getUser(id);
+
+    console.log('meenu: ', menu, menus);
 
     res.render(ui, {
       ...options,
@@ -190,6 +197,8 @@ router.get('/form(/:id)?', async (req, res, next) => {
       item: {
         _id,
         name,
+        menu,
+        menus,
         ordering,
         status,
         description,
@@ -202,6 +211,7 @@ router.post('/save', checkSchema(validationSchema), async (req, res, _next) => {
   const item = {
     name: req.body.name,
     status: req.body.status,
+    menu: req.body.menu,
     ordering: parseInt(req.body.ordering),
     description: req.body.description,
   };
@@ -212,10 +222,13 @@ router.post('/save', checkSchema(validationSchema), async (req, res, _next) => {
   const mode = item && itemId ? Mode.Edit : Mode.Create;
   const ui = `${view.categories}/form`;
 
+  const menus = await MenuQuery.getMenus({ status: 'active' });
+
   const options = {
     item,
     errors,
     collection,
+    menus,
   };
 
   if (mode === Mode.Edit) {
@@ -225,7 +238,15 @@ router.post('/save', checkSchema(validationSchema), async (req, res, _next) => {
         pageTitle: pageTitleEdit,
       });
     } else {
-      await CategoryQuery.save(itemId, item, {
+      const { _id, slug } = await MenuQuery.getMenu(item.menu);
+      const fields = {
+        ...item,
+        menu: {
+          id: _id,
+          slug,
+        },
+      };
+      await CategoryQuery.save(itemId, fields, {
         modify: {
           user_name: 'admin',
           user_id: 0,
@@ -241,7 +262,16 @@ router.post('/save', checkSchema(validationSchema), async (req, res, _next) => {
         pageTitle: pageTitleAdd,
       });
     } else {
-      await CategoryQuery.save('', item, {
+      const { _id, slug } = await MenuQuery.getMenu(item.menu);
+      const fields = {
+        ...item,
+        menu: {
+          id: _id,
+          slug,
+        },
+      };
+
+      await CategoryQuery.save('', fields, {
         created: {
           user_name: 'admin',
           user_id: 0,

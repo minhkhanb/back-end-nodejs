@@ -20,7 +20,7 @@ const connectDatabase = () => {
   // const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST } = config;
 
   // mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`);
-  mongoose.connect(`mongodb://localhost:27017/pokemon`);
+  mongoose.connect(`mongodb://localhost:27017/admin-portal`);
 
   const db = mongoose.connection;
 
@@ -29,6 +29,7 @@ const connectDatabase = () => {
   });
 
   db.once('open', () => {
+    console.log('db: ', db);
     console.log('Connect to database successfully');
   });
 };

@@ -56,7 +56,7 @@ module.exports = {
 
     return Menu.deleteOne({ _id: cid });
   },
-  getUser: (id) => {
+  getMenu: (id) => {
     return Menu.findById(id);
   },
   save: (itemId = '', fields, options) => {
@@ -78,7 +78,7 @@ module.exports = {
   changeGroup: (groupId, data) => {
     return Menu.updateOne({ _id: groupId }, data);
   },
-  getGroups: () => {
-    return Menu.find({}, { id: 1, name: 1 });
+  getMenus: (options) => {
+    return Menu.find(options, { id: 1, name: 1 });
   },
 };
