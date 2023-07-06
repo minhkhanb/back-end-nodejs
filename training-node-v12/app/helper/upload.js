@@ -33,10 +33,6 @@ const uploadFile = () => {
 
       return cb(null, true);
     },
-    onError: (err, next) => {
-      console.log('error', err);
-      next(err);
-    },
   });
 };
 

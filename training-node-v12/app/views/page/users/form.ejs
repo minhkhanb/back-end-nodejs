@@ -16,24 +16,49 @@
               class="row g-3">
           <div class="col-md-12">
             <label>Username</label>
-            <input class="form-control" name="username" value="<%= item.username; %>">
+
+            <div class="sa-input sa-input--large">
+              <div class="sa-input__wrapper">
+                <input class="sa-input__inner" name="username" value="<%= item.username; %>">
+              </div>
+            </div>
           </div>
           <div class="col-md-12">
             <label>Full Name</label>
-            <input class="form-control" name="fullname" value="<%= item.fullname; %>">
+
+            <div class="sa-input sa-input--large">
+              <div class="sa-input__wrapper">
+                <input class="sa-input__inner" name="fullname" value="<%= item.fullname; %>">
+              </div>
+            </div>
           </div>
           <div class="col-md-12">
             <label>Email</label>
-            <input class="form-control" type="email" name="email" value="<%= item.email; %>">
+
+            <div class="sa-input sa-input--large">
+              <div class="sa-input__wrapper">
+                <input class="sa-input__inner" type="email" name="email" value="<%= item.email; %>">
+              </div>
+            </div>
           </div>
           <div class="col-md-12">
             <label>Avatar</label>
-            <input class="form-control" type="file" name="avatar" value="<%= item.avatar %>">
-            <div class="card avatar <%= item.avatar ? `has-img` : null %>" style="width: 8rem;height: 8rem;margin-top: 15px;">
+
+            <div class="sa-input sa-input--large">
+              <div class="sa-input__wrapper">
+                <label style="flex: auto; position: relative;">
+                  <button type="button" class="sa-button">Upload avatar</button>
+                  <input class="sa-upload__input" type="file" name="avatar" value="<%= item.avatar; %>">
+                </label>
+              </div>
+            </div>
+            <div class="card avatar <%= item.avatar ? `has-img` : null %>"
+                 style="width: 8rem;height: 8rem;margin-top: 15px;">
               <a href="#" class="clear text-danger">
                 <i class="fa fa-close"></i>
               </a>
-              <img src="<%= item.avatar ? `upload/users/${item.avatar}` : 'images/default-avatar.jpg' %>" class="card-img" alt="No file chosen">
+              <img src="<%= item.avatar ? `upload/users/${item.avatar}` : 'images/default-avatar.jpg' %>"
+                   class="card-img" alt="No file chosen">
             </div>
           </div>
           <div class="col-md-12">
@@ -42,23 +67,59 @@
           </div>
           <div class="col-md-12">
             <label>Ordering</label>
-            <input class="form-control" type="number" name="ordering" value="<%= item.ordering; %>">
+
+            <div class="sa-input sa-input--large">
+              <div class="sa-input__wrapper">
+                <input class="sa-input__inner" type="number" name="ordering" value="<%= item.ordering; %>">
+              </div>
+            </div>
           </div>
           <div class="col-md-12">
             <label>Status</label>
-            <select name="status" class="form-control">
-              <option value="novalue">Choose Status</option>
-              <option value="active" <%= ((item.status) === "active") ? selected = "selected" : ""; %> >Active
-              </option>
-              <option value="inactive" <%= ((item.status) === "inactive") ? selected = "selected" : ""; %> >
-                Inactive
-              </option>
-            </select>
+
+            <div class="sa-select">
+              <div class="sa-input sa-input--large">
+                <div class="sa-input__wrapper">
+                  <input type="text" class="sa-input__inner" value="<%= item.status %>" placeholder="Choose a item">
+                  <input type="hidden" name="status">
+
+                  <span class="sa-input__suffix">
+                    <span class="sa-input__suffix-inner">
+                      <i class="sa-icon sa-select__caret sa-select__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                          <path
+                              fill="currentColor"
+                              d="M831.872 340.864 512 652.672 192.128 340.864a30.592 30.592 0 0 0-42.752 0 29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728 30.592 30.592 0 0 0-42.752 0z"></path>
+                        </svg>
+                      </i>
+                    </span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="sa-popper is-loading is-pure is-light sa-select__popper" data-popper-placement="bottom-start">
+                <span class="sa-popper__arrow"></span>
+                <div class="sa-select-dropdown">
+                  <div class="sa-scrollbar">
+                    <div class="sa-select-dropdown__wrap sa-scrollbar__wrap sa-scrollbar__wrap--hidden-default">
+                      <ul class="sa-scrollbar__view sa-select-dropdown__list">
+                        <li class="sa-select-dropdown__item <%= ((item.status) === "active") ? ' selected hover' : null; %>" data-value="active">
+                          <span>Active</span>
+                        </li>
+                        <li class="sa-select-dropdown__item" data-value="inactive">
+                          <span>Inactive</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- sa-popper -->
+            </div>
           </div>
           <div class="col-md-12">
             <label>Description</label>
-            <textarea class="form-control" name="description" rows="2"
-                      id="description"><%= item.description; %></textarea>
+
+            <textarea id="description" class="sa-input__inner" name="description" rows="2"><%= item.description; %></textarea>
           </div>
           <div>
             <input class="form-control" name="group_id" type="hidden">

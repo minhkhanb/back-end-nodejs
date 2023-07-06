@@ -1,24 +1,5 @@
 const Menu = require('@src/schema/menus');
 
-Menu.pre('updateOne', async function (next) {
-  try {
-    const updatedFields = this._update.$set;
-
-    // Check if the 'pokemon' field has been modified
-    if (updatedFields && updatedFields.menus) {
-      // Perform the necessary updates on related documents based on the new 'pokemon' value
-      const newMenuId = updatedFields.menus;
-
-      // Your logic to update related documents
-      // For example:
-      await Menu.updateOne({ _id: newMenuId }, { $set: { someField: someValue } });
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
 module.exports = {
   list: (condition, conditionSort, currentPage, totalItemsPage) => {
     return Menu.find(condition)

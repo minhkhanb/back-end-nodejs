@@ -22,7 +22,6 @@ const { view } = require('@src/config/view');
 const { useGroupRequest, useChangeStatus } = require('@src/hook/group');
 const { useValidation } = require('@src/hook/useValidation');
 const { Mode } = require('@src/config/system');
-const { MulterError } = require('multer');
 const { users: collection } = config.collection;
 
 const router = express.Router();
@@ -238,7 +237,7 @@ router.post('/save', upload.single('avatar'), checkSchema(validationSchema), asy
     description: req.body.description,
   };
 
-  console.log('req: ', req.error);
+  console.log('req: ', req.body);
 
   if (req.file) {
     item.avatar = req.file.filename;

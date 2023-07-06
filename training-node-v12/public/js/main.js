@@ -321,7 +321,56 @@
         });
       }).observe(mainContainer);
     }, 200);
-
-
   }
+
+  function saSelect() {
+    const elsSelect = select('.sa-select', true);
+
+    elsSelect.forEach(function (elSelect) {
+      const popper = elSelect.querySelector('.sa-popper');
+
+      if (!popper) return;
+
+      popper.style.display = 'none';
+
+      elSelect.addEventListener('click', function () {
+        const elInput = this.querySelector('.sa-input');
+        const elInputCaret = this.querySelector('.sa-select__caret');
+
+        if (!elInput || !elInputCaret) return;
+
+        const elInputInner = elInput.querySelector('.sa-input__inner');
+
+        elInput.classList.toggle('is-focus');
+        elInputCaret.classList.toggle('is-reverse');
+
+        if (elInput.classList.contains('is-focus')) {
+          popper.style.display = '';
+        } else {
+          popper.style.display = 'none';
+        }
+
+        popper.classList.remove('is-loading');
+
+        const elList = popper.querySelector('.sa-select-dropdown__list');
+
+        if (!elList) return;
+
+        const options = elList.querySelectorAll('.sa-select-dropdown__item');
+
+        if (!options.length) return;
+
+        options.forEach(function (option) {
+          option.addEventListener('click', function () {
+            const value = this.getAttribute('data-value');
+            console.log(value);
+            elInputInner.value = this.innerText;
+            elInputInner.nextElementSibling.value = value;
+          });
+        });
+      });
+    });
+  }
+
+  saSelect();
 })();
