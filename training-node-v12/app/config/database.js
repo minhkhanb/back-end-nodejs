@@ -29,7 +29,6 @@ const connectDatabase = () => {
   });
 
   db.once('open', () => {
-    console.log('db: ', db);
     console.log('Connect to database successfully');
   });
 };

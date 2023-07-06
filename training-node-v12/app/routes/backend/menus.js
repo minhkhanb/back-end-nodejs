@@ -75,8 +75,6 @@ router.get('(/status/:status)?', async (req, res, _next) => {
 
   const items = await MenuQuery.list(condition, conditionSort, currentPage, totalItemsPage);
 
-  console.log('items: ', items);
-
   const options = {
     pageTitle,
     items,
@@ -186,8 +184,6 @@ router.get('/form(/:id)?', async (req, res) => {
     });
   } else {
     const { _id, name, slug, ordering, status, description } = await MenuQuery.getMenu(id);
-
-    console.log('slug: ', slug);
 
     res.render(ui, {
       ...options,

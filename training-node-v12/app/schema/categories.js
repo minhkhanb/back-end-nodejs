@@ -10,6 +10,8 @@ const itemsSchema = new Schema(
     ordering: Number,
     description: String,
     menu: {
+      type: Schema.Types.ObjectId,
+      ref: 'Menus',
       id: String,
       slug: String,
     },
