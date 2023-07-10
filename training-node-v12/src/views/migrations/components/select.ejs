@@ -1,9 +1,10 @@
 <div class="sa-select">
   <div class="sa-input sa-input--large">
+    <span><%= JSON.stringify(optionSelected) %></span>
     <div class="sa-input__wrapper">
-      <input type="text" class="sa-input__inner" value="<%= selectedValue; %>"
+      <input type="text" class="sa-input__inner" value="<%= optionSelected.name %>"
              placeholder="<%= typeof placeholder !== 'undefined' ? placeholder : "Choose an option"; %>">
-      <input type="hidden" name="<%= name; %>" value="<%= selectedValue; %>">
+      <input type="hidden" name="<%= name; %>" value="<%= optionSelected.id %>">
 
       <span class="sa-input__suffix">
         <span class="sa-input__suffix-inner">
@@ -27,10 +28,10 @@
           <ul class="sa-scrollbar__view sa-select-dropdown__list">
             <% options.forEach((option) => { %>
               <li
-                  class="sa-select-dropdown__item <%= selectedValue ?? "selected hover"; %>"
+                  class="sa-select-dropdown__item <%= optionSelected.id === option.id ?? "selected hover"; %>"
                   data-value="<%= option.id %>"
               >
-                <span><%= option.text %></span>
+                <span><%= option.name %></span>
               </li>
             <% }); %>
           </ul>

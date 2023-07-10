@@ -62,8 +62,8 @@
             </div>
           </div>
           <div class="col-md-12">
-            <label>Group</label>
-            <%- groupHelper(groups, item.group) %>
+            <label>Group <%= item.group %></label>
+            <%- include('../../migrations/components/select.ejs', { name: 'group', optionSelected: { id: item.group, name: groups[0].name }, options: groups }) %>
           </div>
           <div class="col-md-12">
             <label>Ordering</label>
@@ -77,49 +77,7 @@
           <div class="col-md-12">
             <label>Status</label>
 
-            <%- include('../../migrations/components/select.ejs', { name: 'status', selectedValue: item.status, options: [{id: '1', text: '1'}, {id: '2', text: '2'}] }) %>
-          </div>
-          <div class="col-md-12">
-            <label>Status</label>
-
-            <div class="sa-select">
-              <div class="sa-input sa-input--large">
-                <div class="sa-input__wrapper">
-                  <input type="text" class="sa-input__inner" value="<%= item.status %>" placeholder="Choose a item">
-                  <input type="hidden" name="status">
-
-                  <span class="sa-input__suffix">
-                    <span class="sa-input__suffix-inner">
-                      <i class="sa-icon sa-select__caret sa-select__icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-                          <path
-                              fill="currentColor"
-                              d="M831.872 340.864 512 652.672 192.128 340.864a30.592 30.592 0 0 0-42.752 0 29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728 30.592 30.592 0 0 0-42.752 0z"></path>
-                        </svg>
-                      </i>
-                    </span>
-                  </span>
-                </div>
-              </div>
-
-              <div class="sa-popper is-loading is-pure is-light sa-select__popper" data-popper-placement="bottom-start">
-                <span class="sa-popper__arrow"></span>
-                <div class="sa-select-dropdown">
-                  <div class="sa-scrollbar">
-                    <div class="sa-select-dropdown__wrap sa-scrollbar__wrap sa-scrollbar__wrap--hidden-default">
-                      <ul class="sa-scrollbar__view sa-select-dropdown__list">
-                        <li class="sa-select-dropdown__item <%= ((item.status) === "active") ? ' selected hover' : null; %>" data-value="active">
-                          <span>Active</span>
-                        </li>
-                        <li class="sa-select-dropdown__item" data-value="inactive">
-                          <span>Inactive</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- sa-popper -->
-            </div>
+            <%- include('../../migrations/components/select.ejs', { name: 'status', optionSelected: { id: item.status, name: 'Active' }, options: [{id: 'active', name: 'Active'}, {id: 'inactive', name: 'InActive'}] }) %>
           </div>
           <div class="col-md-12">
             <label>Description</label>
