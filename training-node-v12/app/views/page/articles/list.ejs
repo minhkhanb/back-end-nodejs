@@ -5,6 +5,8 @@
 <% include ../../helper/sort-by.ejs %>
 <% include ../../helper/sort.ejs %>
 <% include ../../helper/filter-group.ejs %>
+<% include ../../helper/thumbnail.ejs %>
+<% include ../../helper/categoryHelper.ejs %>
 <%- locals.flash; %>
 
 <!-- <div class="alert alert-success" role="alert">
@@ -72,9 +74,10 @@
                       <th scope="col" class="fs--1 align-middle" style="min-width: 8rem">
                         <%- sortHelper(collection, 'Name', sortFilter.sort) %>
                       </th>
+                      <th scope="col" class="fs--1 align-middle">Category</th>
                       <th scope="col" class="fs--1 align-middle">Status</th>
                       <th scope="col" class="fs--1 align-middle">
-                        <%- sortHelper(collection, 'Ordering', sortFilter.sort) %>
+                        Thumbnail
                       </th>
                       <th scope="col" class="fs--1 align-middle" style="min-width: 7.5rem">Created</th>
                       <th scope="col" class="fs--1 align-middle" style="min-width: 7.5rem">Updated</th>
@@ -90,10 +93,12 @@
                           </th>
                           <td class="fs--1 align-middle"><%= index + 1; %></td>
                           <td class="fs--1 align-middle"><%= item.name %></td>
+                          <td class="fs--1 align-middle">
+                            <%- categoryHelper(categories, item.categories) %>
+                          </td>
                           <td class="fs--1 align-middle"><%- statusHelper(item.status, item.id, collection); %></td>
                           <td class="fs--1 align-middle">
-                            <input type="number" value="<%= item.ordering; %>"
-                                   class="form-control text-center ordering">
+                            <%- thumbnailHelper(item.thumbnail) %>
                           </td>
                           <td class="fs--1 align-middle"><%- sortByHelper(item.created.user_name, item.createdAt); %></td>
                           <td class="fs--1 align-middle"><%- sortByHelper(item.modify.user_name, item.updatedAt); %></td>

@@ -1,0 +1,11 @@
+<%
+thumbnailHelper = (thumbnail) => {
+  const avatarImage = thumbnail ? `upload/users/${thumbnail}` : 'images/avatar.jpg'
+
+return `
+   <div class="avatar avatar-l">
+     <img class="bg-dark-light" src="${avatarImage}" alt="">
+    </div>
+    `
+}
+%>

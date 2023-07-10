@@ -16,12 +16,6 @@ const validationSchema = {
       },
     },
   },
-  ordering: {
-    isInt: {
-      options: { min: 0, max: 100 },
-      errorMessage: 'Field from 0 to 100',
-    },
-  },
   status: {
     custom: {
       options: (value) => {

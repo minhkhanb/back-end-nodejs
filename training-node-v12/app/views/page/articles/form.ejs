@@ -1,5 +1,6 @@
 <% include ./../../helper/showError %>
 <% include ../../helper/groupHelper.ejs %>
+<% include ../../helper/categoryHelper.ejs %>
 <div class="card">
   <div class="card-body">
     <h5 class="card-title"></h5>
@@ -12,14 +13,38 @@
     <div class="row">
       <div class="col-md-6">
         <form role="form" action="<%= systemConfig.prefixAdmin ;%>/<%= collection ;%>/save/" method="POST"
-              class="row g-3">
+              class="row g-3" enctype="multipart/form-data">
           <div class="col-md-12">
             <label>Name</label>
             <input class="form-control" name="name" value="<%= item.name ;%>">
           </div>
           <div class="col-md-12">
-            <label>Ordering</label>
-            <input class="form-control" type="number" name="ordering" value="<%= item.ordering ;%>">
+            <label>Slug</label>
+            <input class="form-control" name="slug" value="<%= item.slug ;%>">
+          </div>
+          <div class="col-md-12">
+            <label>Category</label>
+            <%- categoryHelper(categories, item.category) %>
+          </div>
+          <div class="col-md-12">
+            <label>Thumbnail</label>
+
+            <div class="sa-input sa-input--large">
+              <div class="sa-input__wrapper">
+                <label style="flex: auto; position: relative;">
+                  <button type="button" class="sa-button">Upload</button>
+                  <input class="sa-upload__input" type="file" name="thumbnail" value="<%= item.thumbnail; %>">
+                </label>
+              </div>
+            </div>
+            <div class="card avatar <%= item.avatar ? `has-img` : null %>"
+                 style="width: 8rem;height: 8rem;margin-top: 15px;">
+              <a href="#" class="clear text-danger">
+                <i class="fa fa-close"></i>
+              </a>
+              <img src="<%= item.avatar ? `upload/users/${item.avatar}` : 'images/default-avatar.jpg' %>"
+                   class="card-img" alt="No file chosen">
+            </div>
           </div>
           <div class="col-md-12">
             <label>Status</label>

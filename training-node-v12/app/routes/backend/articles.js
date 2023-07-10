@@ -5,6 +5,7 @@ const { checkSchema } = require('express-validator');
 const systemConfig = require('@src/config/system');
 const { config } = require('@src/config/database');
 const ArticleQuery = require('@src/models/articles');
+const CategoryQuery = require('@src/models/categories');
 
 const { createStatusFilter } = require('@src/helper/utils');
 const { getParam } = require('@src/helper/param');
@@ -30,6 +31,9 @@ const { view } = require('@src/config/view');
 const { useValidation } = require('@src/hook/useValidation');
 const { Mode } = require('@src/config/system');
 const { useChangeStatus, useGroupRequest } = require('@src/hook/group');
+const { uploadFile } = require('@src/helper/upload');
+
+const upload = uploadFile();
 
 router.get('(/status/:status)?', async (req, res, _next) => {
   const { currentStatus, currentPage, keyword, sortType, sortField } = useGroupRequest(req);
@@ -74,9 +78,10 @@ router.get('(/status/:status)?', async (req, res, _next) => {
   const { totalItemsPage } = pagination;
 
   const items = await ArticleQuery.list(condition, conditionSort, currentPage, totalItemsPage);
-
+  const categories = await CategoryQuery.list({ status: 'active' });
   const options = {
     pageTitle,
+    categories,
     items,
     sortFilter,
     pagination,
@@ -164,15 +169,20 @@ router.get('/form(/:id)?', async (req, res, _next) => {
   const mode = id === '' ? Mode.Create : Mode.Edit;
   const ui = `${view.articles}/form`;
 
+  const categories = await CategoryQuery.list({ status: 'active' });
+
   const options = {
     collection,
+    categories,
   };
 
   if (mode === Mode.Create) {
     const item = {
       name: '',
+      slug: '',
+      categoryId: 0,
+      thumbnail: '',
       status: '',
-      ordering: 0,
       description: '',
     };
 
@@ -182,7 +192,7 @@ router.get('/form(/:id)?', async (req, res, _next) => {
       pageTitle: pageTitleAdd,
     });
   } else {
-    const { _id, name, ordering, status, description } = await ArticleQuery.getUser(id);
+    const { _id, name, slug, status, description } = await ArticleQuery.getUser(id);
 
     res.render(ui, {
       ...options,
@@ -190,7 +200,7 @@ router.get('/form(/:id)?', async (req, res, _next) => {
       item: {
         _id,
         name,
-        ordering,
+        slug,
         status,
         description,
       },
@@ -198,64 +208,84 @@ router.get('/form(/:id)?', async (req, res, _next) => {
   }
 });
 
-router.post('/save', checkSchema(validationSchema), async (req, res, _next) => {
-  const item = {
-    name: req.body.name,
-    status: req.body.status,
-    ordering: parseInt(req.body.ordering),
-    description: req.body.description,
-  };
+router.post(
+  '/save',
+  upload.single('thumbnail'),
+  checkSchema(validationSchema),
+  async (req, res, _next) => {
+    const item = {
+      name: req.body.name,
+      slug: req.body.slug,
+      status: req.body.status,
+      categoryId: req.body.categoryId,
+      description: req.body.description,
+    };
 
-  const itemId = req.body.id;
+    console.log('file: ', req.file);
+    const categories = await CategoryQuery.list({ status: 'active' });
 
-  const { isError, errors } = useValidation(req);
-  const mode = item && itemId ? Mode.Edit : Mode.Create;
-  const ui = `${view.articles}/form`;
-
-  const options = {
-    item,
-    errors,
-    collection,
-  };
-
-  if (mode === Mode.Edit) {
-    if (!isError) {
-      res.render(ui, {
-        ...options,
-        pageTitle: pageTitleEdit,
-      });
-    } else {
-      await ArticleQuery.save(itemId, item, {
-        modify: {
-          user_name: 'admin',
-          user_id: 0,
-        },
-      });
-
-      req.flash('success', util.format(UPDATE_SUCCESS_MESSAGE), linkIndex);
+    if (req.file) {
+      item.thumbnail = req.file.filename;
     }
-  } else {
-    if (!isError) {
-      res.render(ui, {
-        ...options,
-        pageTitle: pageTitleAdd,
-      });
-    } else {
-      await ArticleQuery.save('', item, {
-        created: {
-          user_name: 'admin',
-          user_id: 0,
-        },
-        modify: {
-          user_name: 'admin',
-          user_id: 0,
-        },
-      });
 
-      req.flash('success', util.format(CREATE_SUCCESS_MESSAGE), linkIndex);
+    const itemId = req.body.id;
+
+    const { isError, errors } = useValidation(req);
+    const mode = item && itemId ? Mode.Edit : Mode.Create;
+    const ui = `${view.articles}/form`;
+
+    const options = {
+      categories,
+      item,
+      errors,
+      collection,
+    };
+
+    if (mode === Mode.Edit) {
+      if (!isError) {
+        res.render(ui, {
+          ...options,
+          pageTitle: pageTitleEdit,
+        });
+      } else {
+        await ArticleQuery.save(itemId, item, {
+          modify: {
+            user_name: 'admin',
+            user_id: 0,
+          },
+        });
+
+        req.flash('success', util.format(UPDATE_SUCCESS_MESSAGE), linkIndex);
+      }
+    } else {
+      if (!isError) {
+        res.render(ui, {
+          ...options,
+          pageTitle: pageTitleAdd,
+        });
+      } else {
+        const category = await CategoryQuery.getUser(item.categoryId);
+
+        console.log(category);
+
+        item.categories = [category];
+
+        await ArticleQuery.save('', item, {
+          created: {
+            user_name: 'admin',
+            user_id: 0,
+          },
+          modify: {
+            user_name: 'admin',
+            user_id: 0,
+          },
+        });
+
+        req.flash('success', util.format(CREATE_SUCCESS_MESSAGE), linkIndex);
+      }
     }
   }
-});
+);
 
 router.get('/sort/:sortField/:sortType', async (req, res, _next) => {
   req.session.sort_field = getParam(req.params, 'sortField', 'ordering');

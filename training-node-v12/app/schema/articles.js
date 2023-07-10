@@ -6,8 +6,16 @@ const { articles } = config.collection;
 const itemsSchema = new Schema(
   {
     name: String,
+    slug: String,
     status: String,
-    ordering: Number,
+    categoryId: String,
+    categories: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'categories',
+      },
+    ],
+    thumbnail: String,
     description: String,
     created: {
       user_name: String,

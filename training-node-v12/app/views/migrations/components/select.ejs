@@ -1,0 +1,48 @@
+<div class="sa-select">
+  <div class="sa-input sa-input--large">
+    <div class="sa-input__wrapper">
+      <input type="text" class="sa-input__inner" value="<%= item.status %>"
+             placeholder="<%= placeholder ? placeholder : 'Choose a option' %>">
+      <input type="hidden" name="<%= name %>">
+
+      <span class="sa-input__suffix">
+        <span class="sa-input__suffix-inner">
+          <i class="sa-icon sa-select__caret sa-select__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+              <path
+                  fill="currentColor"
+                  d="M831.872 340.864 512 652.672 192.128 340.864a30.592 30.592 0 0 0-42.752 0 29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728 30.592 30.592 0 0 0-42.752 0z"></path>
+            </svg>
+          </i>
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <div class="sa-popper is-loading is-pure is-light sa-select__popper" data-popper-placement="bottom-start">
+    <span class="sa-popper__arrow"></span>
+    <div class="sa-select-dropdown">
+      <div class="sa-scrollbar">
+        <div class="sa-select-dropdown__wrap sa-scrollbar__wrap sa-scrollbar__wrap--hidden-default">
+          <ul class="sa-scrollbar__view sa-select-dropdown__list">
+            <% options.map((option) => { %>
+              <li
+                  class="sa-select-dropdown__item <%= selected ?? 'selected hover' %>"
+                  data-value="<%%>"
+              >
+                <span>Active</span>
+              </li>
+            <% }); %>
+            <li class="sa-select-dropdown__item <%= ((item.status) === "active") ? ' selected hover' : null; %>"
+                data-value="active">
+              <span>Active</span>
+            </li>
+            <li class="sa-select-dropdown__item" data-value="inactive">
+              <span>Inactive</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div><!-- sa-popper -->
+</div>

@@ -57,7 +57,10 @@ module.exports = {
     return Category.deleteOne({ _id: cid });
   },
   getUser: (id) => {
-    return Category.findById(id);
+    return Category.findById(id, '_id');
+  },
+  findOne: (id) => {
+    return Category.findOne({ _id: id });
   },
   save: (itemId = '', fields, options) => {
     const isUpdate = itemId !== '';
@@ -66,8 +69,6 @@ module.exports = {
       ...fields,
       ...options,
     };
-
-    console.log('isUpdate: ', isUpdate, itemId, fields);
 
     if (isUpdate) {
       return Category.updateOne({ _id: itemId }, data);
