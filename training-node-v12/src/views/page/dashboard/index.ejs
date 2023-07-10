@@ -1,0 +1,18 @@
+<div class="row">
+  <% for (const metric in dashboardMetrics) { %>
+    <div class="col">
+      <div class="dashboard-metrics">
+        <div class="metric">
+          <div class="card" style="max-width:20rem;">
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= dashboardMetrics[metric] %>
+              </h5>
+              <p class="sub-label">New <%= metric %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
