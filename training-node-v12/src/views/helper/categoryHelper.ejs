@@ -5,7 +5,7 @@ categoryHelper = (categories, category) => {
       <option value="novalue">Choose Category</option>
       ${categories.map(({ _id, name }) => {
         return `
-          <option value="${_id}" ${(category[0].toString() === _id.toString()) ? 'selected' : ''}>${name}</option>`
+          <option value="${_id}" ${(category && category[0].toString() === _id.toString()) ? 'selected' : ''}>${name}</option>`
         }).join('')}
       </select>
      `
