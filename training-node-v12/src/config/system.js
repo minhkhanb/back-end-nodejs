@@ -4,6 +4,7 @@ const Mode = {
 };
 
 module.exports = {
+  frontend: '',
   prefixAdmin: 'admin',
   formatDate: 'LL',
   Mode,

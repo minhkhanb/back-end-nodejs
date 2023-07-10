@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../public/client')));
 
 app.use(
   session({
@@ -41,13 +42,13 @@ app.use(
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('layout', 'backend');
 
 // app.use(logger('dev'));
 
 app.locals.systemConfig = systemConfig;
 app.locals.moment = moment;
 app.use(`/${systemConfig.prefixAdmin}`, require('@src/routes/backend'));
+app.use(`/${systemConfig.frontend}`, require('@src/routes/frontend'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
