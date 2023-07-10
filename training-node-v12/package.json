@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon --exec babel-node ./bin/www",
-    "format": "prettier --write \"app/**/*.{js}\"",
-    "lint": "eslint --fix \"app/**/*.{js}\""
+    "format": "prettier --write \\\"src/app/**/*.{js}\\\"",
+    "lint": "eslint --fix \\\"src/app/**/*.{js}\\\""
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

@@ -1,0 +1,134 @@
+<% include ../../helper/status.ejs %>
+<% include ../../helper/filter-status.ejs %>
+<% include ../../helper/pagination.ejs %>
+<% include ../../helper/action.ejs %>
+<% include ../../helper/sort-by.ejs %>
+<% include ../../helper/sort.ejs %>
+<% include ../../helper/filter-group.ejs %>
+<% include ../../helper/group-acp.ejs %>
+<%- locals.flash; %>
+<%
+let linkPrefix = systemConfig.prefixAdmin + "/" + collection + "/"
+%>
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 class="card-title">
+                Search & Filter
+                <a href="<%= systemConfig.prefixAdmin; %>/<%= collection; %>">
+                  <i class="bi bi-arrow-repeat"></i>
+                </a>
+              </h5>
+
+              <ul class="nav nav-tabs" role="tablist">
+                <%- filterStatusHelper(collection, sortFilter.statusFilter, sortFilter.keyword); %>
+              </ul>
+            </div>
+
+            <div class="col-lg-12">
+              <div class="pt-4 mb-2">
+                <div class="row">
+                  <div class="col-lg-4 offset-lg-8">
+                    <form
+                        action="<%= systemConfig.prefixAdmin; %>/<%= collection; %>/status/<%= sortFilter.currentStatus; %>"
+                        method="GET">
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="keyword" placeholder="Search for..."
+                               value="<%= sortFilter.keyword; %>">
+                        <button type="submit" class="btn btn-info text-white">Search</button>
+                        <button type="button" class="btn btn-warning">
+                          <a
+                              class="text-white"
+                              href="<%= systemConfig.prefixAdmin; %>/<%= collection %>/status/<%= sortFilter.currentStatus %>">
+                            Clear
+                          </a>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <form class="zt-form" id="zt-form" action="" method="post">
+                <%- actionHelper(collection) %>
+
+                <div class="table-responsive scrollbar">
+                  <table class="table datatable">
+                    <thead>
+                    <tr>
+                      <th scope="col" class="align-middle">
+                        <input class="form-check-input cbAll" type="checkbox">
+                      </th>
+                      <th scope="col" class="fs--1 align-middle">#</th>
+                      <th scope="col" class="fs--1 align-middle">
+                        <%- sortHelper(collection, 'Name', sortFilter.sort) %>
+                      </th>
+                      <th scope="col" class="fs--1 align-middle">Status</th>
+                      <th scope="col" class="fs--1 align-middle">
+                        <%- sortHelper(collection, 'Ordering', sortFilter.sort) %>
+                      </th>
+                      <th scope="col" class="fs--1 align-middle">Group</th>
+                      <th scope="col" class="fs--1 align-middle" style="min-width: 7.5rem">Created</th>
+                      <th scope="col" class="fs--1 align-middle" style="min-width: 7.5rem">Updated</th>
+                      <th scope="col" class="fs--1 align-middle" style="min-width: 8.5rem">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if(items.length > 0) { %>
+                      <% items.forEach((item, index)=>{ %>
+                        <tr>
+                          <th scope="row" class="align-middle">
+                            <input class="form-check-input" type="checkbox" name="cid" value="<%= item.id; %>">
+                          </th>
+                          <td class="fs--1 align-middle"><%= index + 1; %></td>
+                          <td class="fs--1 align-middle"><%= item.name %></td>
+                          <td class="fs--1 align-middle"><%- statusHelper(item.status, item.id, collection); %></td>
+                          <td class="fs--1 align-middle">
+                            <input type="number" value="<%= item.ordering; %>"
+                                   class="form-control text-center ordering">
+                          </td>
+                          <td class="fs--1 align-middle">
+                            <%- groupACPHelper(item.group_acp, linkPrefix, item.id) %>
+                          </td>
+                          <td class="fs--1 align-middle"><%- sortByHelper(item.created.user_name, item.createdAt); %></td>
+                          <td class="fs--1 align-middle"><%- sortByHelper(item.modify.user_name, item.updatedAt); %></td>
+                          <td class="fs--1 align-middle">
+                            <a
+                                href="<%= systemConfig.prefixAdmin; %>/<%= collection; %>/form/<%= item.id; %>"
+                                type="button" class="btn btn-warning btn-sm text-white"
+                            >
+                              Edit
+                            </a>
+                            <a href="<%= systemConfig.prefixAdmin; %>/<%= collection; %>/delete/<%= item.id; %>"
+                               type="button" class="btn btn-danger btn-sm btn-delete">Delete</a>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="11" class="fs--1">
+                          <p class="text-center py-4 mb-0">No data</p>
+                        </td>
+                      </tr>
+                    <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="row">
+  <div class="col-lg-12">
+    <%- paginationHelper(pagination, collection, sortFilter.currentStatus, sortFilter.keyword); %>
+  </div>
+</div>
