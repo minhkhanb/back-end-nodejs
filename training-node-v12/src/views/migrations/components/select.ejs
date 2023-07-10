@@ -1,9 +1,9 @@
 <div class="sa-select">
   <div class="sa-input sa-input--large">
     <div class="sa-input__wrapper">
-      <input type="text" class="sa-input__inner" value="<%= item.status %>"
-             placeholder="<%= placeholder ? placeholder : 'Choose a option' %>">
-      <input type="hidden" name="<%= name %>">
+      <input type="text" class="sa-input__inner" value="<%= selectedValue; %>"
+             placeholder="<%= typeof placeholder !== 'undefined' ? placeholder : "Choose an option"; %>">
+      <input type="hidden" name="<%= name; %>" value="<%= selectedValue; %>">
 
       <span class="sa-input__suffix">
         <span class="sa-input__suffix-inner">
@@ -25,21 +25,14 @@
       <div class="sa-scrollbar">
         <div class="sa-select-dropdown__wrap sa-scrollbar__wrap sa-scrollbar__wrap--hidden-default">
           <ul class="sa-scrollbar__view sa-select-dropdown__list">
-            <% options.map((option) => { %>
+            <% options.forEach((option) => { %>
               <li
-                  class="sa-select-dropdown__item <%= selected ?? 'selected hover' %>"
-                  data-value="<%%>"
+                  class="sa-select-dropdown__item <%= selectedValue ?? "selected hover"; %>"
+                  data-value="<%= option.id %>"
               >
-                <span>Active</span>
+                <span><%= option.text %></span>
               </li>
             <% }); %>
-            <li class="sa-select-dropdown__item <%= ((item.status) === "active") ? ' selected hover' : null; %>"
-                data-value="active">
-              <span>Active</span>
-            </li>
-            <li class="sa-select-dropdown__item" data-value="inactive">
-              <span>Inactive</span>
-            </li>
           </ul>
         </div>
       </div>

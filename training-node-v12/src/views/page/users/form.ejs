@@ -77,6 +77,11 @@
           <div class="col-md-12">
             <label>Status</label>
 
+            <%- include('../../migrations/components/select.ejs', { name: 'status', selectedValue: item.status, options: [{id: '1', text: '1'}, {id: '2', text: '2'}] }) %>
+          </div>
+          <div class="col-md-12">
+            <label>Status</label>
+
             <div class="sa-select">
               <div class="sa-input sa-input--large">
                 <div class="sa-input__wrapper">

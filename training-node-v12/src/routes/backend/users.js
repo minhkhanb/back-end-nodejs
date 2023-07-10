@@ -34,6 +34,8 @@ const linkIndex = `/${systemConfig.prefixAdmin}/${collection}`;
 
 const upload = uploadFile();
 
+const layout = 'backend';
+
 router.get('(/status/:status)?', async (req, res, _next) => {
   const { currentStatus, currentPage, keyword, sortType, sortField, groupIdSession } =
     useGroupRequest(req);
@@ -97,6 +99,7 @@ router.get('(/status/:status)?', async (req, res, _next) => {
   };
 
   res.render(ui, {
+    layout,
     ...options,
     groups,
     groupId: groupIdSession,
@@ -198,6 +201,7 @@ router.get('/form(/:id)?', async (req, res) => {
     };
 
     res.render(ui, {
+      layout,
       ...options,
       item,
       pageTitle: pageTitleAdd,
@@ -208,6 +212,7 @@ router.get('/form(/:id)?', async (req, res) => {
       await userModels.getById(id);
 
     res.render(ui, {
+      layout,
       ...options,
       item: {
         _id,
@@ -237,8 +242,6 @@ router.post('/save', upload.single('avatar'), checkSchema(validationSchema), asy
     description: req.body.description,
   };
 
-  console.log('req: ', req.body);
-
   if (req.file) {
     item.avatar = req.file.filename;
   }
@@ -261,6 +264,7 @@ router.post('/save', upload.single('avatar'), checkSchema(validationSchema), asy
   if (mode === Mode.Edit) {
     if (!isError) {
       res.render(ui, {
+        layout,
         ...options,
         item,
         itemId,
@@ -274,6 +278,7 @@ router.post('/save', upload.single('avatar'), checkSchema(validationSchema), asy
   } else {
     if (!isError) {
       res.render(ui, {
+        layout,
         ...options,
         item,
         itemId,
@@ -328,7 +333,7 @@ router.get('/upload', async (req, res) => {
     pageTitle: pageTitleEdit,
   };
 
-  res.render(ui, options);
+  res.render(ui, { layout, ...options });
 });
 
 router.post('/upload', upload.single('upload_file'), async (req, res) => {
@@ -337,7 +342,7 @@ router.post('/upload', upload.single('upload_file'), async (req, res) => {
     pageTitle: pageTitleEdit,
   };
 
-  res.render(ui, options);
+  res.render(ui, { layout, ...options });
 });
 
 module.exports = router;

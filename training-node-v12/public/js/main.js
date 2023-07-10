@@ -323,6 +323,19 @@
     }, 200);
   }
 
+  function clickOutside(element, callback) {
+    function documentClick(evt) {
+      if (!element.contains(evt.target)) {
+        callback();
+      }
+    }
+
+    document.addEventListener('click', documentClick);
+
+    return function cleanup() {
+      document.removeEventListener('click', documentClick);
+    };
+  }
   function saSelect() {
     const elsSelect = select('.sa-select', true);
 
@@ -368,6 +381,17 @@
             elInputInner.nextElementSibling.value = value;
           });
         });
+      });
+
+      clickOutside(elSelect, function () {
+        console.log(elSelect);
+        const elInput = elSelect.querySelector('.sa-input');
+        const elInputCaret = elSelect.querySelector('.sa-select__caret');
+        const popper = elSelect.querySelector('.sa-popper');
+
+        elInput.classList.remove('is-focus');
+        elInputCaret.classList.remove('is-reverse');
+        popper.style.display = 'none';
       });
     });
   }
