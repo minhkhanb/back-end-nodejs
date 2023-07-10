@@ -35,6 +35,10 @@ const { uploadFile } = require('@src/helper/upload');
 
 const upload = uploadFile();
 
+const layoutOptions = {
+  layout: 'backend',
+};
+
 router.get('(/status/:status)?', async (req, res, _next) => {
   const { currentStatus, currentPage, keyword, sortType, sortField } = useGroupRequest(req);
   const ui = `${view.articles}/list`;
@@ -90,6 +94,7 @@ router.get('(/status/:status)?', async (req, res, _next) => {
 
   res.render(ui, {
     ...options,
+    ...layoutOptions,
   });
 });
 
@@ -188,6 +193,7 @@ router.get('/form(/:id)?', async (req, res, _next) => {
 
     res.render(ui, {
       ...options,
+      ...layoutOptions,
       item,
       pageTitle: pageTitleAdd,
     });
@@ -196,6 +202,7 @@ router.get('/form(/:id)?', async (req, res, _next) => {
 
     res.render(ui, {
       ...options,
+      ...layoutOptions,
       pageTitle: pageTitleEdit,
       item: {
         _id,
@@ -245,6 +252,7 @@ router.post(
       if (!isError) {
         res.render(ui, {
           ...options,
+          ...layoutOptions,
           pageTitle: pageTitleEdit,
         });
       } else {
@@ -261,6 +269,7 @@ router.post(
       if (!isError) {
         res.render(ui, {
           ...options,
+          ...layoutOptions,
           pageTitle: pageTitleAdd,
         });
       } else {
