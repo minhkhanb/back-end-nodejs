@@ -1,18 +1,94 @@
-const http = require('http');
+const express = require('express');
+const { connectDatabase } = require('@src/config/database');
 
-const server = http.createServer((req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader('X-Powered-By', 'Node.js');
-  res.statusCode = 404;
+const app = express();
 
-  res.writeHead(404, {
-    'Content-Type': 'application/json',
-    'X-Powered-By': 'Node.js'
+// Connect to database
+connectDatabase();
+
+app.use(express.json());
+
+const courses = [
+  {
+    id: '1',
+    name: 'NodeJS',
+  },
+  {
+    id: '2',
+    name: 'VueJS',
+  },
+  {
+    id: '3',
+    name: 'Typescript',
+  },
+];
+
+app.get('/', (req, res) => {
+  res.send('hello');
+});
+
+app.get('/api/course', (req, res) => {
+  res.send(courses);
+});
+
+app.get('/api/course/:id', (req, res) => {
+  const courseId = req.params.id;
+
+  const course = courses.find((course) => course.id === courseId);
+
+  if (!course) {
+    res.status(404).send({ success: false, message: 'Course does not exist.' });
+  }
+
+  res.send(course);
+});
+
+app.post('/api/course/add', (req, res) => {
+  const course = {
+    id: req.body.id,
+    name: req.body.name,
+  };
+
+  courses.push(course);
+
+  res.send({ success: true, data: course, message: 'Add course successfully' });
+});
+
+app.put('/api/course/update/:id', (req, res) => {
+  const courseId = req.params.id;
+  const indexOfCourse = courses.findIndex((course) => course.id === courseId);
+
+  if (indexOfCourse === -1) {
+    res.status(404).send({ success: false, message: 'Course not found' });
+  }
+
+  courses[indexOfCourse] = {
+    ...courses[indexOfCourse],
+    name: req.body.name,
+  };
+
+  res.send({
+    success: true,
+    data: courses[indexOfCourse],
+    message: 'Update course successfully',
   });
+});
 
-  res.end(JSON.stringify({
-    success: false,
-    error: 'NOT FOUND',
-    data: null
-  }));
+app.delete('/api/course/delete/:id', (req, res) => {
+  const courseId = req.params.id;
+  const indexOfCourse = courses.findIndex((course) => course.id === courseId);
+
+  if (indexOfCourse === -1) {
+    res.status(404).send({ success: false, message: 'Course not found' });
+  }
+
+  courses.splice(indexOfCourse, 1);
+
+  res.send({ success: true, message: 'Delele course successfully' });
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server started at http://localhost:${PORT}`);
 });
