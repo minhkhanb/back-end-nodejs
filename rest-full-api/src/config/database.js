@@ -7,6 +7,7 @@ const config = {
   DB_HOST: 'cluster0.0ozojp9.mongodb.net',
 
   collection: {
+    item: 'item',
     course: 'course',
   },
 };

@@ -23,6 +23,8 @@ const courses = [
   },
 ];
 
+app.use('/api/v1', require('@src/routes'));
+
 app.get('/', (req, res) => {
   res.send('hello');
 });
