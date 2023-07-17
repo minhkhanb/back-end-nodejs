@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const config = {
-  DB_NAME: 'nodejs',
+  DB_NAME: 'admin-portal',
   DB_USER: 'admin',
-  DB_PASSWORD: 'ShRAexePjIwDVTvp',
-  DB_HOST: 'cluster0.0ozojp9.mongodb.net',
+  DB_PASSWORD: 'Aa12345!@' || 'ShRAexePjIwDVTvp',
+  DB_HOST: 'localhost:27017' || 'cluster0.0ozojp9.mongodb.net',
 
   collection: {
     items: 'items',
@@ -17,10 +17,11 @@ const config = {
 };
 
 const connectDatabase = () => {
-  // const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST } = config;
+  const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST } = config;
 
   // mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`);
-  mongoose.connect(`mongodb://localhost:27017/admin-portal`);
+  mongoose.connect(`mongodb://${DB_USER}:${encodeURIComponent(DB_PASSWORD)}@${DB_HOST}/${DB_NAME}`);
+  //mongodb://admin:Aa12345!%40@localhost:27017/
 
   const db = mongoose.connection;
 

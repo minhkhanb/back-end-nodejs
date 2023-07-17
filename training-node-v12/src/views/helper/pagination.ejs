@@ -20,7 +20,7 @@ paginationHelper = (pagination, collection, currentStatus, keywork) => {
   if (keywork !== '') {
     link += '?keywork=' + keywork + '&page=';
   } else {
-    link += '&page=';
+    link += '?page=';
   }
   if (totalPages > 1) {
 

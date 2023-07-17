@@ -32,6 +32,8 @@ const { useValidation } = require('@src/hook/useValidation');
 const { Mode } = require('@src/config/system');
 const { useChangeStatus, useGroupRequest } = require('@src/hook/group');
 
+const layout = 'backend';
+
 router.get('(/status/:status)?', async (req, res, _next) => {
   const { currentStatus, currentPage, keyword, sortType, sortField } = useGroupRequest(req);
   const ui = `${view.categories}/list`;
@@ -77,6 +79,7 @@ router.get('(/status/:status)?', async (req, res, _next) => {
   const items = await CategoryQuery.list(condition, conditionSort, currentPage, totalItemsPage);
 
   const options = {
+    layout,
     pageTitle,
     items,
     sortFilter,
@@ -182,6 +185,7 @@ router.get('/form(/:id)?', async (req, res, _next) => {
     };
 
     res.render(ui, {
+      layout,
       ...options,
       item,
       pageTitle: pageTitleAdd,
@@ -192,6 +196,7 @@ router.get('/form(/:id)?', async (req, res, _next) => {
     console.log('meenu: ', menu, menus);
 
     res.render(ui, {
+      layout,
       ...options,
       pageTitle: pageTitleEdit,
       item: {
@@ -234,6 +239,7 @@ router.post('/save', checkSchema(validationSchema), async (req, res, _next) => {
   if (mode === Mode.Edit) {
     if (!isError) {
       res.render(ui, {
+        layout,
         ...options,
         pageTitle: pageTitleEdit,
       });
@@ -258,6 +264,7 @@ router.post('/save', checkSchema(validationSchema), async (req, res, _next) => {
   } else {
     if (!isError) {
       res.render(ui, {
+        layout,
         ...options,
         pageTitle: pageTitleAdd,
       });

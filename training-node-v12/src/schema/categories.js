@@ -8,11 +8,19 @@ const itemsSchema = new Schema(
     name: String,
     status: String,
     ordering: Number,
+    slug: String,
     description: String,
     menu: {
       id: String,
       slug: String,
     },
+    parentId: String,
+    articles: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'articles',
+      },
+    ],
     created: {
       user_name: String,
       user_id: Number,

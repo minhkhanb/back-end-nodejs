@@ -303,4 +303,13 @@ router.get('/sort/:sortField/:sortType', async (req, res, _next) => {
   res.redirect(linkIndex);
 });
 
+// change-position
+// router.get('/change-position/:id/:position', async (req, res, next) => {
+//   let currentPosition = getParam.getParam(req.params, 'position', 'active');
+//   let id = getParam.getParam(req.params, 'id', '');
+//   await ArticleQuery.changePosition(id, currentPosition, { task: 'update-one' });
+//
+//   req.flash('success', util.format(CREATE_SUCCESS_MESSAGE), linkIndex);
+// });
+
 module.exports = router;

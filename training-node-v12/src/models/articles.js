@@ -7,6 +7,11 @@ module.exports = {
       .limit(totalItemsPage)
       .skip((currentPage - 1) * totalItemsPage);
   },
+  listPosition: () => {
+    return Article.find({ status: 'active', position: 'active' })
+      .sort({ ordering: 'asc' })
+      .limit(3);
+  },
   count: (condition) => {
     return Article.count(condition);
   },

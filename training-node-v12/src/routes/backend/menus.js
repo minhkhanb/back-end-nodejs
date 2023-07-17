@@ -31,6 +31,8 @@ const { useValidation } = require('@src/hook/useValidation');
 const { Mode } = require('@src/config/system');
 const { useChangeStatus, useGroupRequest } = require('@src/hook/group');
 
+const layout = 'backend';
+
 router.get('(/status/:status)?', async (req, res, _next) => {
   const { currentStatus, currentPage, keyword, sortType, sortField } = useGroupRequest(req);
   const ui = `${view.menus}/list`;
@@ -56,7 +58,7 @@ router.get('(/status/:status)?', async (req, res, _next) => {
 
   let pagination = {
     totalItems: 1,
-    totalItemsPage: 4,
+    totalItemsPage: 5,
     currentPage,
     pageRanges: 3,
   };
@@ -75,6 +77,8 @@ router.get('(/status/:status)?', async (req, res, _next) => {
 
   const items = await MenuQuery.list(condition, conditionSort, currentPage, totalItemsPage);
 
+  console.log('items: ', items, condition, conditionSort, currentPage, totalItemsPage);
+
   const options = {
     pageTitle,
     items,
@@ -84,6 +88,7 @@ router.get('(/status/:status)?', async (req, res, _next) => {
   };
 
   res.render(ui, {
+    layout,
     ...options,
   });
 });
@@ -178,6 +183,7 @@ router.get('/form(/:id)?', async (req, res) => {
     };
 
     res.render(ui, {
+      layout,
       ...options,
       item,
       pageTitle: pageTitleAdd,
@@ -186,6 +192,7 @@ router.get('/form(/:id)?', async (req, res) => {
     const { _id, name, slug, ordering, status, description } = await MenuQuery.getMenu(id);
 
     res.render(ui, {
+      layout,
       ...options,
       pageTitle: pageTitleEdit,
       item: {
@@ -224,6 +231,7 @@ router.post('/save', checkSchema(validationSchema), async (req, res, _next) => {
   if (mode === Mode.Edit) {
     if (!isError) {
       res.render(ui, {
+        layout,
         ...options,
         pageTitle: pageTitleEdit,
       });
@@ -240,6 +248,7 @@ router.post('/save', checkSchema(validationSchema), async (req, res, _next) => {
   } else {
     if (!isError) {
       res.render(ui, {
+        layout,
         ...options,
         pageTitle: pageTitleAdd,
       });

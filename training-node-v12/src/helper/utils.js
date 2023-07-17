@@ -4,7 +4,7 @@ const Group = require('@src/schema/groups');
 const User = require('@src/schema/users');
 const fs = require('fs');
 
-const { groups, items, users } = config.collection;
+const { groups, items, users, menus, categories, articles } = config.collection;
 
 const statusFilter = [
   { name: 'All', value: 'all', count: 0, class: 'default' },
@@ -30,6 +30,8 @@ let createStatusFilter = async (collection, currentStatus) => {
     statusFilter[index].count = await getCount(collection, condition);
   }
 
+  console.log('curr: ', statusFilter);
+
   return statusFilter;
 };
 
@@ -39,6 +41,12 @@ const getCount = (collection, condition) => {
   } else if (collection === groups) {
     return Group.count(condition);
   } else if (collection === users) {
+    return User.count(condition);
+  } else if (collection === menus) {
+    return User.count(condition);
+  } else if (collection === categories) {
+    return User.count(condition);
+  } else if (collection === articles) {
     return User.count(condition);
   }
 };

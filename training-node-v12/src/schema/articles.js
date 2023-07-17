@@ -8,6 +8,7 @@ const itemsSchema = new Schema(
     name: String,
     slug: String,
     status: String,
+    position: String,
     categoryId: String,
     categories: [
       {
