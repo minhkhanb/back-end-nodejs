@@ -1,8 +1,8 @@
 
 <% 
 
-positionHelper = (status, id, collection) => {
-    let link = systemConfig.prefixAdmin + "/" + collection + "/change-position/"+ id + "/" + position
+positionHelper = (position, id, collection) => {
+    let link = systemConfig.prefixAdmin + "/" + collection + "/change-position/"+ id + "/" + (position === 'inactive' ? 'active' : 'inactive')
     let xhtml = '';
         if(position === 'active'){
             xhtml= '<span class="badge text-bg-info rounded-1 text-white fw-normal fs--1 p-2 py-1">TOP POST</span>'

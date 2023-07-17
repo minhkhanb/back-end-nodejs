@@ -35,10 +35,6 @@ const { uploadFile } = require('@src/helper/upload');
 
 const upload = uploadFile();
 
-const layoutOptions = {
-  layout: 'backend',
-};
-
 router.get('(/status/:status)?', async (req, res, _next) => {
   const { currentStatus, currentPage, keyword, sortType, sortField } = useGroupRequest(req);
   const ui = `${view.articles}/list`;
@@ -94,7 +90,6 @@ router.get('(/status/:status)?', async (req, res, _next) => {
 
   res.render(ui, {
     ...options,
-    ...layoutOptions,
   });
 });
 
@@ -193,7 +188,6 @@ router.get('/form(/:id)?', async (req, res, _next) => {
 
     res.render(ui, {
       ...options,
-      ...layoutOptions,
       item,
       pageTitle: pageTitleAdd,
     });
@@ -202,7 +196,6 @@ router.get('/form(/:id)?', async (req, res, _next) => {
 
     res.render(ui, {
       ...options,
-      ...layoutOptions,
       pageTitle: pageTitleEdit,
       item: {
         _id,
@@ -225,6 +218,7 @@ router.post(
       slug: req.body.slug,
       status: req.body.status,
       categoryId: req.body.categoryId,
+      position: req.body.position,
       description: req.body.description,
     };
 
@@ -252,7 +246,6 @@ router.post(
       if (!isError) {
         res.render(ui, {
           ...options,
-          ...layoutOptions,
           pageTitle: pageTitleEdit,
         });
       } else {
@@ -269,7 +262,6 @@ router.post(
       if (!isError) {
         res.render(ui, {
           ...options,
-          ...layoutOptions,
           pageTitle: pageTitleAdd,
         });
       } else {
@@ -304,12 +296,12 @@ router.get('/sort/:sortField/:sortType', async (req, res, _next) => {
 });
 
 // change-position
-// router.get('/change-position/:id/:position', async (req, res, next) => {
-//   let currentPosition = getParam.getParam(req.params, 'position', 'active');
-//   let id = getParam.getParam(req.params, 'id', '');
-//   await ArticleQuery.changePosition(id, currentPosition, { task: 'update-one' });
-//
-//   req.flash('success', util.format(CREATE_SUCCESS_MESSAGE), linkIndex);
-// });
+router.get('/change-position/:id/:position', async (req, res, next) => {
+  let currentPosition = getParam(req.params, 'position', 'active');
+  let id = getParam(req.params, 'id', '');
+  await ArticleQuery.changePosition(id, currentPosition);
+
+  req.flash('success', util.format(CREATE_SUCCESS_MESSAGE), linkIndex);
+});
 
 module.exports = router;

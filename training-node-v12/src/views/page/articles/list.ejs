@@ -7,6 +7,7 @@
 <% include ../../helper/filter-group.ejs %>
 <% include ../../helper/thumbnail.ejs %>
 <% include ../../helper/categoryHelper.ejs %>
+<% include ../../helper/position.ejs %>
 <%- locals.flash; %>
 
 <!-- <div class="alert alert-success" role="alert">
@@ -76,6 +77,7 @@
                       </th>
                       <th scope="col" class="fs--1 align-middle">Category</th>
                       <th scope="col" class="fs--1 align-middle">Status</th>
+                      <th scope="col" class="fs--1 align-middle">Position</th>
                       <th scope="col" class="fs--1 align-middle">
                         Thumbnail
                       </th>
@@ -97,6 +99,7 @@
                             <%- categoryHelper(categories, item.categories) %>
                           </td>
                           <td class="fs--1 align-middle"><%- statusHelper(item.status, item.id, collection); %></td>
+                          <td class="fs--1 align-middle"><%- positionHelper(item.position, item.id, collection); %></td>
                           <td class="fs--1 align-middle">
                             <%- thumbnailHelper(item.thumbnail) %>
                           </td>

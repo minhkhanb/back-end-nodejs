@@ -30,8 +30,6 @@ let createStatusFilter = async (collection, currentStatus) => {
     statusFilter[index].count = await getCount(collection, condition);
   }
 
-  console.log('curr: ', statusFilter);
-
   return statusFilter;
 };
 

@@ -29,6 +29,20 @@ module.exports = {
 
     return Article.updateOne({ _id: cid }, fields);
   },
+  changePosition: (cid, position, options) => {
+    const isManyUpdate = Array.isArray(cid);
+
+    const fields = {
+      position,
+      ...options,
+    };
+
+    if (isManyUpdate) {
+      return Article.updateMany({ _id: { $in: cid } }, fields);
+    }
+
+    return Article.updateOne({ _id: cid }, fields);
+  },
   changeOrdering: (cid, ordering, options) => {
     const isManyUpdate = Array.isArray(cid);
 
