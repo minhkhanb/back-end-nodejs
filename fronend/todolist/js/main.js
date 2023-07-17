@@ -10,7 +10,7 @@ const METHODS = {
   DELETE: 'DELETE'
 };
 
-let areaListTask = $('area-list-task');
+let areaListTask = $('#area-list-task');
 let areaForm = $('area-form');
 let btnToggleForm = $('btn-submit');
 let inputID = $('input-id');
@@ -25,8 +25,27 @@ const getTaskList = () => {
       'Content-Type': 'application/json'
     }
   })
-    .done(function (data) {
-      console.log(data);
+    .done(function (response) {
+      const { success } = response;
+      if (response.data && success) {
+        const data = response.data;
+        console.log(data);
+        const html = $.map(data, function (item, index) {
+          return `
+          <tr>
+              <td>${index}</th>
+              <td>${item.name}</td>
+              <td><span class="badge bg-danger"></span></td>
+              <td>
+                  <button class="btn btn-warning">Edit</button>
+                  <button class="btn btn-danger">Delete</button>
+              </td>
+          </tr>
+          `
+        }).join(',');
+
+        areaListTask.html(html);
+      }
     });
 };
 
