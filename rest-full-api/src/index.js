@@ -1,5 +1,7 @@
 const express = require('express');
+const cors = require('cors');
 const { connectDatabase } = require('@src/config/database');
+const { notFound, errorHandler } = require('@src/middlewares');
 
 const app = express();
 
@@ -7,6 +9,7 @@ const app = express();
 connectDatabase();
 
 app.use(express.json());
+app.use(cors());
 
 const courses = [
   {
@@ -88,6 +91,9 @@ app.delete('/api/course/delete/:id', (req, res) => {
 
   res.send({ success: true, message: 'Delele course successfully' });
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
