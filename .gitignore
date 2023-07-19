@@ -16,3 +16,5 @@ training-node-v26/.idea/
 training-node-v26/node_modules/
 fronend/todolist/.idea/
 training-node-v12/public/upload/
+portal-news/.idea/
+portal-news/package-lock.json
