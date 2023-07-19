@@ -1,9 +1,7 @@
-
-<!-- <%= JSON.stringify(articlesNews); %> -->
 <% include ./../../helper/categories.ejs %>
 <%
 
-let folderUpload = '/uploads/acticles/'
+let folderUpload = '/upload/users/'
 
 %>
 <div class="col-lg-8 post-list">
@@ -15,11 +13,11 @@ let folderUpload = '/uploads/acticles/'
                 <div class="col-lg-5 post-left">
                     <div class="feature-img relative">
                         <div class="overlay overlay-bg"></div>
-                        <img class="img-fluid" src="<%= folderUpload + item.thumb  %>" alt="<%= item.name %>">
+                        <img class="img-fluid" src="<%= folderUpload + item.thumbnail  %>" alt="<%= item.name %>">
                     </div>
                     <ul class="tags">
                         <li>
-                            <a href="#"><%- showCategoryName(category,item.categoriesId).name %></a>
+                            <a href="#"><%- showCategoryName(categories,item.categoryId).name %></a>
                         </li>
                     </ul>
                 </div>
@@ -41,9 +39,9 @@ let folderUpload = '/uploads/acticles/'
                                 <span class="lnr lnr-bubble"></span>06 Comments</a>
                         </li>
                     </ul>
-                    <p class="excert">
-                        <%= item.editorData.substring(1,100) %>....
-                    </p>
+                    <div class="excert">
+                        <%= item.description.substring(1,100) %>....
+                    </div>
                 </div>
             </div>
         <% }) %>

@@ -210,7 +210,7 @@ router.get('/form(/:id)?', async (req, res, _next) => {
 
 router.post(
   '/save',
-  upload.single('thumbnail'),
+  upload.single('thumbnail', 'articles'),
   checkSchema(validationSchema),
   async (req, res, _next) => {
     const item = {
@@ -266,8 +266,6 @@ router.post(
         });
       } else {
         const category = await CategoryQuery.getUser(item.categoryId);
-
-        console.log(category);
 
         item.categories = [category];
 

@@ -193,8 +193,6 @@ router.get('/form(/:id)?', async (req, res, _next) => {
   } else {
     const { _id, name, menu, ordering, status, description } = await CategoryQuery.getUser(id);
 
-    console.log('meenu: ', menu, menus);
-
     res.render(ui, {
       layout,
       ...options,

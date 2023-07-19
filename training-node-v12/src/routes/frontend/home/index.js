@@ -9,8 +9,7 @@ app.get('/', async (req, res) => {
   const articlesSpecial = await ArticleQuery.getSpecialArticles();
   const articlesNews = await ArticleQuery.getNewsArticles();
 
-  console.log('articlesSpecial: ', articlesSpecial);
-  res.render('frontend/pages/home/index', {
+  res.render('client/page/home/index', {
     layout: 'frontend',
     top_post: true,
     categories,
