@@ -1,11 +1,22 @@
 const express = require('express');
 const ArticleQuery = require('@src/models/articles');
+const Category = require('@src/schema/categories');
 
 const app = express.Router();
 
 app.get('/', async (req, res) => {
-  const items = await ArticleQuery.listPosition();
-  res.render('frontend/pages/home/index', { layout: 'frontend', top_post: true, items });
+  const categories = await Category.find({ status: 'active' }).sort({ ordering: 'asc' });
+  const articlesSpecial = await ArticleQuery.getSpecialArticles();
+  const articlesNews = await ArticleQuery.getNewsArticles();
+
+  console.log('articlesSpecial: ', articlesSpecial);
+  res.render('frontend/pages/home/index', {
+    layout: 'frontend',
+    top_post: true,
+    categories,
+    articlesSpecial,
+    articlesNews,
+  });
 });
 
 module.exports = app;

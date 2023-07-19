@@ -98,4 +98,12 @@ module.exports = {
   getGroups: () => {
     return Article.find({}, { id: 1, name: 1 });
   },
+  getSpecialArticles: () => {
+    return Article.find({ status: 'active', position: 'active' })
+      .sort({ ordering: 'asc' })
+      .limit(3);
+  },
+  getNewsArticles: () => {
+    return Article.find({ status: 'active' }).sort({ createdAt: 'desc' }).limit(5);
+  },
 };
