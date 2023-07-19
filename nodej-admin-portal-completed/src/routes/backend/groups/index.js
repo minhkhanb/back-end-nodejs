@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.send('Group router');
+  res.render('backend/pages/groups');
 });
 
 module.exports = router;
