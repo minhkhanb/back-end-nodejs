@@ -1,12 +1,13 @@
 <div class="col-md-6 ">
   <div class="x_panel">
     <div class="x_title">
-      <h2>Add or Edit Item</h2>
+      <h2><%= pageTitle %></h2>
       <ul class="nav navbar-right panel_toolbox">
         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
         </li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i
+                class="fa fa-wrench"></i></a>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="#">Settings 1</a>
             <a class="dropdown-item" href="#">Settings 2</a>
@@ -17,46 +18,31 @@
       <div class="clearfix"></div>
     </div>
     <div class="x_content">
-      <br />
+      <br/>
       <form class="form-horizontal form-label-left">
-
-        <div class="form-group row">
-          <label class="control-label col-md-3 col-sm-3 ">Name</label>
-          <div class="col-md-9 col-sm-9 ">
-            <input type="text" class="form-control" placeholder="Name">
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" name="name" placeholder="Name">
         </div>
-        <div class="form-group row">
-          <label class="control-label col-md-3 col-sm-3 ">Ordering</label>
-          <div class="col-md-9 col-sm-9 ">
-            <input type="number" class="form-control" placeholder="Ordering">
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Ordering</label>
+          <input type="number" class="form-control" name="ordering" placeholder="Ordering">
         </div>
-        <div class="form-group row">
-          <label class="control-label col-md-3 col-sm-3 ">Status</label>
-          <div class="col-md-9 col-sm-9 ">
-            <select class="form-control">
-              <option>Choose Status</option>
-              <option>Active</option>
-              <option>InActive</option>
-            </select>
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Status</label>
+          <select class="form-select" name="status">
+            <option>Choose Status</option>
+            <option>Active</option>
+            <option>InActive</option>
+          </select>
         </div>
-        <div class="form-group row">
-          <label class="control-label col-md-3 col-sm-3 ">Description</label>
-          <div class="col-md-9 col-sm-9 ">
-            <textarea class="form-control" rows="3" placeholder="Description"></textarea>
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" rows="3" name="description" placeholder="Description"></textarea>
         </div>
 
-        <div class="ln_solid"></div>
-        <div class="form-group">
-          <div class="col-md-9 col-sm-9  offset-md-3">
-            <button type="button" class="btn btn-primary">Cancel</button>
-            <button type="submit" class="btn btn-success">Save Changes</button>
-          </div>
-        </div>
-
+        <a href="./admin/items" role="button" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-success">Save Changes</button>
       </form>
     </div>
   </div>
