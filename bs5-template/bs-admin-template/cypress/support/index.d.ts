@@ -1,0 +1,6 @@
+/*eslint-disable prettier/prettier*/
+declare namespace Cypress {
+  interface Chainable<Subject> {
+    login(email:string, password:string): Chainable<Subject>
+  }
+}
