@@ -10,7 +10,11 @@ import { Provider } from 'react-redux';
 import { store } from './src/store';
 import QueryDataProvider from './src/components/QueryDataProvider';
 
+import './src/assets/scss/user.scss';
 import './src/assets/scss/index.scss';
+
+import 'bootstrap/dist/js/bootstrap.min';
+import '@popperjs/core/dist/umd/popper.min';
 
 export const wrapRootElement = ({ element }) => {
   return (

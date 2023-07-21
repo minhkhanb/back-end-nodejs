@@ -1,0 +1,29 @@
+.navbar-top {
+  font-size: .8rem;
+  font-weight: 600;
+  background: var(--phoenix-navbar-top-bg-color);
+  min-height: var(--phoenix-navbar-top-height);
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--phoenix-navbar-vertical-border-color);
+}
+
+.logo-text {
+  font-size: 1.63625rem;
+  color: var(--phoenix-logo-text);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  margin-bottom: 0;
+}
+
+.navbar.navbar-top {
+  .navbar-logo {
+    height: auto;
+  }
+}
+
+.navbar .navbar-logo {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+}
